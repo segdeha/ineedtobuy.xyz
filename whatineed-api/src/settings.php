@@ -1,4 +1,5 @@
 <?php
+
 return [
     'settings' => [
         'displayErrorDetails' => true, // set to false in production
@@ -13,6 +14,14 @@ return [
         'logger' => [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
+        ],
+
+        // Database settings
+        'db' => [
+            'host' => 'db154.pair.com',
+            'user' => 'segdeha_23',
+            'pass' => 'jqQhzv9C',
+            'dbname' => 'segdeha_ineedtobuyxyz',
         ],
     ],
 ];
