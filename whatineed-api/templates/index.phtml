@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>What I need. Your smart shopping list.</title>
+        <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+        <style>
+        body {
+            background: white;
+            color: gray;
+            font: 200 18px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 33vh 0 0 0;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        h1 {
+            color: black;
+            letter-spacing: -3px;
+            font-family: 'Lato', "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 84px;
+            font-weight: 100;
+            margin-bottom: 0;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>What I need.</h1>
+        <p>Your smart shopping list.</p>
+<?php if (isset($name)): ?>
+        <h2>Hello <?= htmlspecialchars($name); ?>!</h2>
+<?php endif; ?>
+    </body>
+</html>
