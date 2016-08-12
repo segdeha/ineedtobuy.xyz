@@ -44,11 +44,12 @@ $app->get('/api/things/{user_id}', function ($request, $response, $args) {
 $app->post('/api/purchase', function ($request, $response) {
     $json = $request->getParsedBody();
 
+    $user_id = filter_var((int)$json['data']['user_id'], FILTER_VALIDATE_INT);
     $thing_id = filter_var((int)$json['data']['thing_id'], FILTER_VALIDATE_INT);
 
     $data = array(
         'data' => array(
-            'thing_id' => $thing_id
+            'result' => addPurchase($user_id, $thing_id)
         )
     );
 
