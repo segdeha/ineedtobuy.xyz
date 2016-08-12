@@ -5,7 +5,7 @@ require('actions.php');
 
 // render index view
 $app->get('/', function ($request, $response, $args) {
-    return $this->renderer->render($response, 'index.phtml', $args);
+    return $this->renderer->render($response, 'index.phtml');
 });
 
 // return info about a thing
@@ -55,5 +55,3 @@ $app->post('/api/purchase', function ($request, $response) {
 
     return $response->withJson($data);
 });
-
-// $app->post('/api/', function ($request, $response, $args) {});
