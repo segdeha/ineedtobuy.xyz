@@ -18,10 +18,17 @@ return [
 
         // Database settings
         'db' => [
+            'driver' => 'mysql',
             'host' => 'db154.pair.com',
-            'user' => 'segdeha_23',
-            'pass' => 'jqQhzv9C',
+            'username' => 'segdeha_23',
+            'password' => 'jqQhzv9C',
             'dbname' => 'segdeha_ineedtobuyxyz',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
         ],
+
+        // Password salt
+        'salt' => 'D8z$5p71V@a$Uk@UqV8C0kDO*at=D9#U'
     ],
 ];
