@@ -12,8 +12,6 @@ if (PHP_SAPI == 'cli-server') {
 
 define('BASE_DIR', '/usr/home/segdeha/apps/ineedtobuy.xyz');
 
-// echo '<pre>';var_dump($_SERVER);exit;
-
 $is_dev = $_SERVER["SERVER_NAME"] === "0.0.0.0";
 
 // DEVELOPMENT
@@ -29,17 +27,8 @@ if ($is_dev) {
     require __DIR__ . '/../src/middleware.php';
     // Register routes
     require __DIR__ . '/../src/routes.php';
-    // enable CORS
-    $app->options('/{routes:.+}', function ($request, $response, $args) {
-        return $response;
-    });
-    $app->add(function ($request, $response, $next) {
-        $response = $next($request, $response);
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    });
+    // Origin server
+    $origin_server = '*';
 }
 // PRODUCTION
 else {
@@ -54,18 +43,21 @@ else {
     require BASE_DIR . '/src/middleware.php';
     // Register routes
     require BASE_DIR . '/src/routes.php';
-    // enable CORS
-    $app->options('/{routes:.+}', function ($request, $response, $args) {
-        return $response;
-    });
-    $app->add(function ($request, $response, $next) {
-        $response = $next($request, $response);
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', 'segdeha.com')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    });
+    // Origin server
+    $origin_server = 'segdeha.com';
 }
+
+// enable CORS
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+$app->add(function ($request, $response, $next) {
+    $response = $next($request, $response);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', $origin_server)
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+});
 
 // Run app
 $app->run();
