@@ -22,3 +22,5 @@ $app->get('/api/thing/[{barcode}]', function ($request, $response, $args) {
 $app->get('/api/things/[{user_id}]', function ($request, $response, $args) {
     // return a list of the user's things
 });
+
+$app->post('', function () {});
