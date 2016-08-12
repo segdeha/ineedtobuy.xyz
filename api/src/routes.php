@@ -12,8 +12,13 @@ $app->get('/', function ($request, $response, $args) {
 $app->get('/api/thing/{barcode}', function ($request, $response, $args) {
     $barcode = filter_var((int)$args['barcode'], FILTER_VALIDATE_INT);
 
+    $thing = getThingInfoFromBarcode($barcode);
+
     $data = array(
-        'data' => getThingInfoFromBarcode($barcode)
+        'data' => array(
+            'barcode' => $barcode,
+            'thing' => $thing,
+        )
     );
 
     return $response->withJson($data);
@@ -23,9 +28,12 @@ $app->get('/api/thing/{barcode}', function ($request, $response, $args) {
 $app->get('/api/things/{user_id}', function ($request, $response, $args) {
     $user_id = filter_var((int)$args['user_id'], FILTER_VALIDATE_INT);
 
+    $things = getListOfThingsFromUserId($user_id);
+
     $data = array(
         'data' => array(
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'things' => $things
         )
     );
 
