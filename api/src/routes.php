@@ -28,6 +28,7 @@ $app->get('/api/things/{user_id}', function ($request, $response, $args) {
     $user_id = filter_var((int)$args['user_id'], FILTER_VALIDATE_INT);
 
     $things = getListOfThingsFromUserId($user_id);
+    $things = array_map('addLastPurchased', $things);
 
     $data = array(
         'data' => $things

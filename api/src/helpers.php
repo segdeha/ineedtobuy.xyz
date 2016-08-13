@@ -22,3 +22,9 @@ function dateDifference($time) {
         return $numberOfUnits . ' ' . $text . ($numberOfUnits > 1 ? 's' : '');
     }
 }
+
+function addLastPurchased($thing) {
+    date_default_timezone_set('America/Los_Angeles');
+    $thing['last_purchased'] = dateDifference(strtotime($thing['purchase_date']));
+    return $thing;
+}
