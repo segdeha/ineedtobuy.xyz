@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.pdxcodeguild.whatineed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>WhatINeed</name>
+<widget id="com.segdeha.ineedtobuyxyz" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>iNeedToBuy.XYZ</name>
     <description>
-        Smart shopping list.
+        Your smart shopping list.
     </description>
-    <author email="andrew@pdxcodeguild.com" href="http://pdxcodeguild.com">
-        PDX Code Guild
+    <author email="andrew@hedges.name" href="http://andrew.hedges.name">
+        Andrew Hedges
     </author>
     <icon src="res/icon.png" />
     <content src="index.html" />
