@@ -27,8 +27,5 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
         ],
-
-        // Password salt
-        'salt' => 'D8z$5p71V@a$Uk@UqV8C0kDO*at=D9#U'
     ],
 ];
