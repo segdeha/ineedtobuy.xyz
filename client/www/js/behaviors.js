@@ -57,7 +57,10 @@
                     }
                 });
                 posting.fail(function (json) {
-                    alert('Login failed. Try again.');
+                    // release the server connection before showing the alert
+                    window.requestAnimationFrame(function () {
+                        alert('Login failed. Try again.');
+                    });
                 });
             }
         });
