@@ -1,8 +1,7 @@
 /* jshint esversion: 6 */
 (function (window, document, $, undefined) {
 
-    // update whenever ngrok is restarted
-    window.BASEURL = 'https://pdxcodeguild.fwd.wf';
+    window.BASEURL = 'http://segdeha.com/ineedtobuy.xyz';
 
     function onDeviceReady() {
         $('.ui.form').form({
@@ -43,9 +42,9 @@
                     dataType: 'json'
                 });
                 posting.done(function (json) {
-                    if (json.data && json.data.user_id) {
+                    if (json.data && json.data.id) {
                         // set USERID globally
-                        window.USERID = json.data.user_id;
+                        window.USERID = json.data.id;
 
                         $('#login').fadeOut(250, function () {
                             $('#lists').addClass('show');
@@ -53,13 +52,16 @@
                         });
                     }
                     else {
-                        alert('Invalid login. Try again.');
+                        // release the server connection before showing the alert
+                        window.requestAnimationFrame(function () {
+                            alert('Unknown user. Try again.');
+                        });
                     }
                 });
                 posting.fail(function (json) {
                     // release the server connection before showing the alert
                     window.requestAnimationFrame(function () {
-                        alert('Login failed. Try again.');
+                        alert('Invalid login. Try again.');
                     });
                 });
             }

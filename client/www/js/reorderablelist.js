@@ -48,7 +48,7 @@ var ReorderableList = (function (window, document, $, undefined) {
             items: '.active .list .item'
         };
         // fetch data from server
-        var getting = $.getJSON(`${BASEURL}/api/things/${USERID}/`);
+        var getting = $.getJSON(`${BASEURL}/api/things/${USERID}`);
         // var getting = $.getJSON(`${BASEURL}/static/_data.json`);
         getting.done(function (json) {
             window.list = new ReorderableList(selectors, json.data);
@@ -162,7 +162,7 @@ var ReorderableList = (function (window, document, $, undefined) {
 
                 // save new state to server
                 var posting = $.post({
-                    url: `${BASEURL}/api/purchase/`,
+                    url: `${BASEURL}/api/purchase`,
                     data: { purchase_id: purchase_id }
                 });
                 posting.fail(function (json) {
