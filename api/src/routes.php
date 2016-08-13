@@ -1,7 +1,8 @@
 <?php
-// routes.php
+// routes
 
 require('actions.php');
+require('PasswordStorage.php');
 
 // render index view
 $app->get('/', function ($request, $response, $args) {
@@ -50,6 +51,45 @@ $app->post('/api/purchase', function ($request, $response) {
     $data = array(
         'data' => array(
             'result' => addPurchase($user_id, $thing_id)
+        )
+    );
+
+    return $response->withJson($data);
+});
+
+// $app->post('/api/register', function ($request, $response) {
+//     $json = $request->getParsedBody();
+//
+//     $full_name = filter_var((string)$json['data']['full_name'], FILTER_SANITIZE_STRING);
+//     $username = filter_var((string)$json['data']['username'], FILTER_SANITIZE_STRING);
+//     $email = filter_var((string)$json['data']['email'], FILTER_VALIDATE_EMAIL);
+//     $password = filter_var((string)$json['data']['password'], FILTER_SANITIZE_STRING);
+//
+//     $hashed_password = PasswordStorage::create_hash($password);
+//
+//     // TODO insert into DB
+// });
+
+$app->post('/api/login', function ($request, $response) {
+    $json = $request->getParsedBody();
+
+    $username = filter_var((string)$json['data']['username'], FILTER_SANITIZE_STRING);
+    $password = filter_var((string)$json['data']['password'], FILTER_SANITIZE_STRING);
+
+    $user = getUserFromUsername($username);
+
+    if ($user) {
+        $is_valid = PasswordStorage::verify_password($password, $user['password']);
+        unset($user['password']);
+    }
+
+    // if (!$is_valid) {
+    //     $response = $this->response->setStatus(403);
+    // }
+
+    $data = array(
+        'data' => array(
+            'result' => $user
         )
     );
 

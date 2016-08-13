@@ -1,7 +1,7 @@
 <?php
-
 // helper functions
 
+// based on http://stackoverflow.com/a/36297417/11577
 function dateDifference($time) {
     $time = time() - $time; // to get the time since that moment
     $time = $time < 1 ? 1 : $time;
@@ -14,7 +14,6 @@ function dateDifference($time) {
               60 => 'minute',
                1 => 'second'
     );
-
     foreach ($tokens as $unit => $text) {
         if ($time < $unit) {
             continue;

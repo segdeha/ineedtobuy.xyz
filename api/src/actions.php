@@ -36,3 +36,13 @@ function addPurchase($user_id, $thing_id) {
 
     return 'OK';
 }
+
+function getUserFromUsername($username) {
+    global $pdo;
+
+    $stmt = $pdo->prepare('SELECT * from users WHERE username = ?;');
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $user;
+}
