@@ -69,11 +69,28 @@ var ReorderableList = (function (window, document, $, undefined) {
      * Render a list
      */
     proto.render = function () {
+/*
+{
+    "id": "1",
+    "name": "LCD Cleaning Wipe",
+    "created_date": "2016-08-12 15:13:58",
+    "modified_date": "2016-08-12 15:13:39",
+    "product_image": null,
+    "barcode": "2147483647",
+    "thing_id": "1",
+    "user_id": "1",
+    "status": "IMMEDIATELY",
+    "estimated_number_of_days": "7",
+    "purchase_date": "2016-08-12 15:13:58",
+    "predicted_replace_days": "7"
+}
+*/
         function buildItem(item) {
+            var src = item.src || 'img/default-image.png';
             item.status = item.status.toLowerCase();
 
             html += `
-                <div class="item" data-thing-id="${item.thing_id}" data-purchase-id="${item.purchase_id}" data-src="${item.src}">
+                <div class="item" data-thing-id="${item.thing_id}" data-purchase-id="${item.purchase_id}" data-src="${src}">
                     <div class="content">
                         <div class="ui checkbox left-floated-checkbox">
                             <input type="checkbox" name="example">

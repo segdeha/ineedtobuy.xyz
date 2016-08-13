@@ -29,7 +29,7 @@
 
 /* branding element */
 h1 {
-    background: url(https://pdxcodeguild.fwd.wf/static/img/whatineed-logo.png) no-repeat;
+    background: url(../img/whatineed-logo.png) no-repeat;
     background-size: 32px 32px;
     height: 32px;
     position: absolute;
@@ -48,7 +48,7 @@ h1 {
     width: 32px;
 }
     #refresh i {
-        background: transparent url(https://pdxcodeguild.fwd.wf/static/img/refresh-icon.png) center center no-repeat;
+        background: transparent url(../img/refresh-icon.png) center center no-repeat;
         background-size: 24px 24px;
         display: inline-block;
         height: 16px;

@@ -8,24 +8,24 @@
     },
     "installed_plugins": {
         "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.pdxcodeguild.whatineed"
+            "PACKAGE_NAME": "com.segdeha.ineedtobuyxyz"
         }
     }
 }
