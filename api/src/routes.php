@@ -1,8 +1,9 @@
 <?php
 // routes
 
-require('actions.php');
 require('PasswordStorage.php');
+require('helpers.php');
+require('actions.php');
 
 // render index view
 $app->get('/', function ($request, $response, $args) {
