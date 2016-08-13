@@ -1,8 +1,6 @@
 <?php
 // actions
 
-require('helpers.php');
-
 $pdo = $app->getContainer()['db'];
 
 function getListOfThingsFromUserId($user_id) {
