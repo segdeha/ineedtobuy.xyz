@@ -71,10 +71,10 @@ $app->post('/api/purchase', function ($request, $response) {
 // });
 
 $app->post('/api/login', function ($request, $response) {
-    $json = $request->getParsedBody();
+    $vars = $request->getParsedBody();
 
-    $username = filter_var((string)$json['data']['username'], FILTER_SANITIZE_STRING);
-    $password = filter_var((string)$json['data']['password'], FILTER_SANITIZE_STRING);
+    $username = filter_var((string)$vars['username'], FILTER_SANITIZE_STRING);
+    $password = filter_var((string)$vars['password'], FILTER_SANITIZE_STRING);
 
     $user = getUserFromUsername($username);
 
