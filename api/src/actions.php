@@ -31,7 +31,7 @@ function addPurchase($user_id, $thing_id) {
     $estimated_number_of_days = 7;
     $predicted_replace_days = 7;
 
-    $stmt = $pdo->prepare('INSERT into purchases (user_id, thing_id, estimated_number_of_days, predicted_replace_days) VALUES(?, ?, ?, ?);');
+    $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, estimated_number_of_days, predicted_replace_days) VALUES(?, ?, ?, ?);');
     $stmt->execute([$user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days]);
 
     return 'OK';
@@ -40,9 +40,17 @@ function addPurchase($user_id, $thing_id) {
 function getUserFromUsername($username) {
     global $pdo;
 
-    $stmt = $pdo->prepare('SELECT * from users WHERE username = ?;');
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?;');
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $user;
+}
+
+function updateLastLoginDateById($user_id) {
+    global $pdo;
+
+    $stmt = $pdo->prepare('UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE id = ?;');
+
+    return $stmt->execute([$user_id]);
 }

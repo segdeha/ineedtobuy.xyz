@@ -83,9 +83,13 @@ $app->post('/api/login', function ($request, $response) {
         unset($user['password']);
     }
 
-    // if (!$is_valid) {
-    //     $response = $this->response->setStatus(403);
-    // }
+    if ($is_valid) {
+        $succeeded = updateLastLoginDateById($user['id']);
+    }
+    else {
+        $response = $response->withStatus(403);
+        $user = NULL;
+    }
 
     $data = array(
         'data' => array(
