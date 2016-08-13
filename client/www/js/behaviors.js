@@ -35,7 +35,7 @@
                 password.blur();
 
                 var posting = $.post({
-                    url: `${BASEURL}/login/`,
+                    url: $(this).attr('action'),
                     data: {
                         username: username.val(),
                         password: password.val()
