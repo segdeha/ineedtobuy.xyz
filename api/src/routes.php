@@ -32,10 +32,7 @@ $app->get('/api/things/{user_id}', function ($request, $response, $args) {
     $things = getListOfThingsFromUserId($user_id);
 
     $data = array(
-        'data' => array(
-            'user_id' => $user_id,
-            'things' => $things
-        )
+        'data' => $things
     );
 
     return $response->withJson($data);
@@ -49,9 +46,7 @@ $app->post('/api/purchase', function ($request, $response) {
     $thing_id = filter_var((int)$json['data']['thing_id'], FILTER_VALIDATE_INT);
 
     $data = array(
-        'data' => array(
-            'result' => addPurchase($user_id, $thing_id)
-        )
+        'data' => addPurchase($user_id, $thing_id)
     );
 
     return $response->withJson($data);
@@ -92,9 +87,7 @@ $app->post('/api/login', function ($request, $response) {
     }
 
     $data = array(
-        'data' => array(
-            'result' => $user
-        )
+        'data' => $user
     );
 
     return $response->withJson($data);
