@@ -17,10 +17,7 @@ $app->get('/api/thing/{barcode}', function ($request, $response, $args) {
     $thing = getThingInfoFromBarcode($barcode);
 
     $data = array(
-        'data' => array(
-            'barcode' => $barcode,
-            'thing' => $thing,
-        )
+        'data' => $thing
     );
 
     return $response->withJson($data);
