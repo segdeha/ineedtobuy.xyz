@@ -118,7 +118,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                     var data = {
                         id: 0,
                         name: 'Unknown Product',
-                        product_image: 'img/default-image.png'
+                        product_image: BASEURL + '/assets/img/default-image.png'
                     };
                     // preload the image before showing the modal
                     var img = new Image();

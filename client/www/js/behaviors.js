@@ -101,7 +101,7 @@
                 $('#product-info .last-purchased').html(last_purchased);
 
                 // get image source from div.item[data-src]
-                src = item.attr('data-src') || 'img/default-image.png';
+                src = item.attr('data-src') || BASEURL + '/assets/img/default-image.png';
                 $('#product-info .image').attr('src', src);
 
                 // show modal

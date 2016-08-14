@@ -27,6 +27,10 @@ var ReorderableList = (function (window, document, $, undefined) {
         this.itemHeight = null;
         // start preloading images
         var delay = 100; // ms
+        this.data = this.data.map(function (item) {
+            item.src = item.src || BASEURL + '/assets/img/default-image.png';
+            return item;
+        });
         this.data.forEach(function (item, idx) {
             setTimeout(function () {
                 var img = new Image();
@@ -87,11 +91,10 @@ var ReorderableList = (function (window, document, $, undefined) {
         }
         */
         function buildItem(item) {
-            var src = item.src || 'img/default-image.png';
             item.status = item.status.toLowerCase();
 
             html += `
-                <div class="item" data-thing-id="${item.thing_id}" data-purchase-id="${item.purchase_id}" data-src="${src}">
+                <div class="item" data-thing-id="${item.thing_id}" data-purchase-id="${item.purchase_id}" data-src="${item.src}">
                     <div class="content">
                         <div class="ui checkbox left-floated-checkbox">
                             <input type="checkbox" name="example">
@@ -103,6 +106,7 @@ var ReorderableList = (function (window, document, $, undefined) {
                     </div>
                 </div>
             `;
+
             this.ids.push(item.thing_id);
         }
 
