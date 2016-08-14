@@ -9,7 +9,7 @@ $api_key = $container->get('settings')['outpan'];
 function getListOfThingsFromUserId($user_id) {
     global $pdo;
 
-    $stmt = $pdo->prepare('SELECT things.id, thing_id, name, purchase_date, predicted_replace_days, status, product_image, barcode FROM things, purchases WHERE user_id = ? AND things.id = purchases.thing_id GROUP BY thing_id ORDER BY purchases.purchase_date DESC;');
+    $stmt = $pdo->prepare('SELECT purchases.id AS purchase_id, things.id, thing_id, name, purchase_date, predicted_replace_days, status, product_image, barcode FROM things, purchases WHERE user_id = ? AND things.id = purchases.thing_id GROUP BY thing_id ORDER BY purchases.purchase_date DESC;');
     $stmt->execute([$user_id]);
     $things = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
