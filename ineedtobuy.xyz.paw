@@ -71,7 +71,7 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z107"></relationship>
     </object>
     <object type="LMREQUEST" id="z107">
-        <attribute name="body" type="string">[{"data":{"json":"{\\"data\\":{\\"thing_id\\":1,\\"user_id\\":1}}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"json":"{\\"data\\":{\\"purchase_id\\":1}}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">77DD926D-3736-4392-B0BB-4224BD7EF8F7</attribute>
         <attribute name="url" type="string">http://0.0.0.0:8080/api/purchase</attribute>
         <attribute name="storecookies" type="bool">1</attribute>

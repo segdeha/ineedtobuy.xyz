@@ -6,6 +6,23 @@ $container = $app->getContainer();
 $pdo = $container->get('db');
 $api_key = $container->get('settings')['outpan'];
 
+function getThingAndUserIdsFromPurchaseId($purchase_id) {
+    global $pdo;
+
+    $stmt = $pdo->prepare('SELECT user_id, thing_id FROM purchases WHERE id = ?;');
+    $stmt->execute([$purchase_id]);
+    $ids = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (isset($ids[0])) {
+        $ids = $ids[0];
+    }
+    else {
+        $ids = NULL;
+    }
+
+    return $ids;
+}
+
 function getListOfThingsFromUserId($user_id) {
     global $pdo;
 

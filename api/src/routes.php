@@ -46,13 +46,21 @@ $app->get('/api/things/{user_id}', function ($request, $response, $args) {
 
 // add a new purchase record
 $app->post('/api/purchase', function ($request, $response) {
-    $json = $request->getParsedBody();
+    $vars = $request->getParsedBody();
 
-    $user_id = filter_var((int)$json['data']['user_id'], FILTER_VALIDATE_INT);
-    $thing_id = filter_var((int)$json['data']['thing_id'], FILTER_VALIDATE_INT);
+    $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
+
+    $ids = getThingAndUserIdsFromPurchaseId($purchase_id);
+
+    if (NULL === $ids) {
+        $data = NULL;
+    }
+    else {
+        $data = addPurchase($ids['user_id'], $ids['thing_id']);
+    }
 
     $data = array(
-        'data' => addPurchase($user_id, $thing_id)
+        'data' => $data
     );
 
     return $response->withJson($data);
