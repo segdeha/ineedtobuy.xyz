@@ -106,16 +106,8 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
                 getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}`);
-                getting.done(function (json) {
-                    // preload the image before showing the modal
-                    var img = new Image();
-                    img.onload = function () {
-                        displayProductModal(json.data);
-                    };
-                    img.src = json.data.product_image;
-                });
-                getting.fail(function (json) {
-                    var data = {
+                getting.always(function (json) {
+                    var data = json.data || {
                         id: 0,
                         name: 'Unknown Product',
                         product_image: BASEURL + '/assets/img/default-image.png'
