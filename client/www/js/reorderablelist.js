@@ -69,22 +69,23 @@ var ReorderableList = (function (window, document, $, undefined) {
      * Render a list
      */
     proto.render = function () {
-/*
-{
-    "id": "1",
-    "name": "LCD Cleaning Wipe",
-    "created_date": "2016-08-12 15:13:58",
-    "modified_date": "2016-08-12 15:13:39",
-    "product_image": null,
-    "barcode": "2147483647",
-    "thing_id": "1",
-    "user_id": "1",
-    "status": "IMMEDIATELY",
-    "estimated_number_of_days": "7",
-    "purchase_date": "2016-08-12 15:13:58",
-    "predicted_replace_days": "7"
-}
-*/
+        /*
+        {
+            "id": "1",
+            "name": "LCD Cleaning Wipe",
+            "created_date": "2016-08-12 15:13:58",
+            "modified_date": "2016-08-12 15:13:39",
+            "product_image": null,
+            "barcode": "2147483647",
+            "thing_id": "1",
+            "user_id": "1",
+            "status": "IMMEDIATELY",
+            "estimated_number_of_days": "7",
+            "purchase_date": "2016-08-12 15:13:58",
+            "last_purchased": "5 days",
+            "predicted_replace_days": "7"
+        }
+        */
         function buildItem(item) {
             var src = item.src || 'img/default-image.png';
             item.status = item.status.toLowerCase();

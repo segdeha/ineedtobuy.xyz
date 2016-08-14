@@ -29,6 +29,7 @@ return [
         ],
 
         // API keys
+        // https://www.outpan.com/developers.php
         'outpan' => '831918d76cae3694b33f93cbac4a3501',
     ],
 ];
