@@ -45,7 +45,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
             window.list.fetch();
         });
         posting.fail(function (json) {
-            alert('Adding product failed. Try again.');
+            rafAlert('Adding product failed. Try again.');
         });
         posting.always(function () {
             $button.removeClass('loading');
@@ -107,11 +107,6 @@ var BarcodeReader = (function (window, document, $, undefined) {
 
                 getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}`);
                 getting.done(function (json) {
-                    // json.data = json.data || {
-                    //     id: 0,
-                    //     name: 'Unknown Product',
-                    //     product_image: 'https://pdxcodeguild.fwd.wf/static/img/default-image.png'
-                    // };
                     // preload the image before showing the modal
                     var img = new Image();
                     img.onload = function () {
@@ -123,7 +118,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                     var data = {
                         id: 0,
                         name: 'Unknown Product',
-                        product_image: 'https://pdxcodeguild.fwd.wf/static/img/default-image.png'
+                        product_image: 'img/default-image.png'
                     };
                     // preload the image before showing the modal
                     var img = new Image();
@@ -142,9 +137,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
             // hide loading indicator
             dimmer.classList.remove('active');
             // put this in a RAF so the dimmer can hide before the alert shows
-            window.requestAnimationFrame(function () {
-                alert('No barcode detected. Try again.');
-            });
+            rafAlert('No barcode detected. Try again.');
         }
 
         Quagga.decodeSingle({
@@ -172,7 +165,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
      * Called if image capture fails
      */
     proto.onCaptureFail = function (message) {
-        alert('Image capture failed because: ' + message);
+        rafAlert('Image capture failed because: ' + message);
     };
 
     return BarcodeReader;

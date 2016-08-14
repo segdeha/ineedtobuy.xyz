@@ -3,6 +3,10 @@
 
     window.BASEURL = 'http://segdeha.com/ineedtobuy.xyz';
 
+    window.rafAlert = function (str) {
+        window.requestAnimationFrame(alert(str));
+    }
+
     function onDeviceReady() {
         $('.ui.form').form({
             fields: {

@@ -55,7 +55,7 @@ var ReorderableList = (function (window, document, $, undefined) {
             list.render();
         });
         getting.fail(function (json) {
-            alert('Refreshing the list failed. Try again.');
+            rafAlert('Refreshing the list failed. Try again.');
         });
         getting.always(function () {
             // delay a quarter second so it’s not so jarring
@@ -183,7 +183,7 @@ var ReorderableList = (function (window, document, $, undefined) {
                     data: { purchase_id: purchase_id }
                 });
                 posting.fail(function (json) {
-                    alert('Saving purchase failed. Try again.');
+                    rafAlert('Saving purchase failed. Try again.');
                 });
             },
             onUnchecked: function() {
@@ -219,7 +219,7 @@ var ReorderableList = (function (window, document, $, undefined) {
                 //     }
                 // });
                 // posting.fail(function (json) {
-                //     alert('Saving purchase failed. Try again.');
+                //     rafAlert('Saving purchase failed. Try again.');
                 // });
             }
         });
