@@ -98,7 +98,7 @@ var ReorderableList = (function (window, document, $, undefined) {
                         </div>
                         <span class="status ${item.status}"></span>
                         <span class="header">${item.name}</span>
-                        <div class="description">Last purchased ${item.last_purchased}</div>
+                        <div class="description">Last purchased ${item.last_purchased} ago</div>
                     </div>
                 </div>
             `;
