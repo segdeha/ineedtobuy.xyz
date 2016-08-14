@@ -75,10 +75,12 @@ function getThingInfoFromBarcode($barcode) {
                 $name = $response->attributes->Brand;
             }
 
-            $stmt = $pdo->prepare('INSERT INTO things (name, barcode) VALUES(?, ?);');
-            $stmt->execute([$name, $barcode]);
+            if ($name) {
+                $stmt = $pdo->prepare('INSERT INTO things (name, barcode) VALUES(?, ?);');
+                $stmt->execute([$name, $barcode]);
 
-            $thing = getThingFromDatabaseFromBarcode($barcode);
+                $thing = getThingFromDatabaseFromBarcode($barcode);
+            }
         }
     }
 
