@@ -1,7 +1,10 @@
 <?php
 // actions
 
-$pdo = $app->getContainer()['db'];
+$container = $app->getContainer();
+
+$pdo = $container->get('db');
+$api_key = $container->get('settings')['outpan'];
 
 function getListOfThingsFromUserId($user_id) {
     global $pdo;
@@ -13,12 +16,71 @@ function getListOfThingsFromUserId($user_id) {
     return $things;
 }
 
-function getThingInfoFromBarcode($barcode) {
+function getThingFromDatabaseFromBarcode($barcode) {
     global $pdo;
 
     $stmt = $pdo->prepare('SELECT * FROM things WHERE barcode = ?;');
     $stmt->execute([$barcode]);
     $thing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $thing;
+}
+
+function getThingInfoFromBarcode($barcode) {
+    global $pdo, $api_key;
+
+    $thing = getThingFromDatabaseFromBarcode($barcode);
+
+    /* invalid barcode response:
+    {
+        "error": {
+            "code": 1003,
+            "message": "Invalid GTIN."
+        }
+    }
+    */
+    /* valid barcode response
+    {
+        "gtin": "0027000488058",
+        "outpan_url": "https:\/\/www.outpan.com\/view_product.php?barcode=0027000488058",
+        "name": null,
+        "attributes": {
+            "Brand": "Orville Redenbacher's",
+            "Net Weight": "30 oz"
+        },
+        "images": [],
+        "videos": [],
+        "categories": []
+    }
+    */
+    // if no match, try to get it from outpan
+    if (!$thing) {
+        $url = "https://api.outpan.com/v2/products/$barcode?apikey=$api_key";
+        $options = array(
+            CURLOPT_URL            => $url,
+            CURLOPT_HEADER         => false,
+            CURLOPT_RETURNTRANSFER => true,
+        );
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $response = json_decode(curl_exec($ch));
+        curl_close($ch);
+
+        if (NULL === $response->error) {
+            // add to database
+            if (NULL !== $response->name) {
+                $name = $response->name;
+            }
+            else {
+                $name = $response->attributes->Brand;
+            }
+
+            $stmt = $pdo->prepare('INSERT INTO things (name, barcode) VALUES(?, ?);');
+            $stmt->execute([$name, $barcode]);
+
+            $thing = getThingFromDatabaseFromBarcode($barcode);
+        }
+    }
 
     return $thing;
 }

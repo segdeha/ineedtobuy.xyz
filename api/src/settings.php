@@ -27,5 +27,8 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
         ],
+
+        // API keys
+        'outpan' => '831918d76cae3694b33f93cbac4a3501',
     ],
 ];

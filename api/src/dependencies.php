@@ -26,14 +26,3 @@ $container['db'] = function ($c) {
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
 };
-
-// // service factory for the ORM
-// $container['db'] = function ($container) {
-//     $capsule = new \Illuminate\Database\Capsule\Manager;
-//     $capsule->addConnection($container['settings']['db']);
-//
-//     $capsule->setAsGlobal();
-//     $capsule->bootEloquent();
-//
-//     return $capsule;
-// };

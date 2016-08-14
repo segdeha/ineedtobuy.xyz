@@ -12,7 +12,14 @@ $app->get('/', function ($request, $response, $args) {
 
 // return info about a thing
 $app->get('/api/thing/{barcode}', function ($request, $response, $args) {
-    $barcode = filter_var((int)$args['barcode'], FILTER_VALIDATE_INT);
+    $barcode = $args['barcode'];
+
+    if (!ctype_digit($barcode)) {
+        // respond with error
+        return $response->withStatus(400)->withJson(array(
+            'error' => 'Invalid barcode'
+        ));
+    }
 
     $thing = getThingInfoFromBarcode($barcode);
 
