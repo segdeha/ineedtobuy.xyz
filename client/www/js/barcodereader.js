@@ -33,7 +33,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
         };
 
         var posting = $.post({
-            url: `${BASEURL}/api/purchase/`,
+            url: `${BASEURL}/api/purchase`,
             data: postData
         });
         posting.done(function (json) {
@@ -105,7 +105,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 // update status for the user
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
-                getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}/`);
+                getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}`);
                 getting.done(function (json) {
                     // json.data = json.data || {
                     //     id: 0,

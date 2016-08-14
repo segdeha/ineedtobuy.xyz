@@ -1,9 +1,9 @@
 <?php
 // routes
 
-require('PasswordStorage.php');
-require('helpers.php');
-require('actions.php');
+require('PasswordStorage.php'); // password hashing
+require('helpers.php'); // helper/pure functions
+require('actions.php'); // functions for interacting with the database
 
 // render index view
 $app->get('/', function ($request, $response, $args) {

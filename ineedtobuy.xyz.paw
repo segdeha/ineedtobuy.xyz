@@ -128,6 +128,7 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z114"></relationship>
     </object>
     <object type="LMREQUEST" id="z114">
+        <attribute name="body" type="string"></attribute>
         <attribute name="uuid" type="string">E671FB11-0408-4E03-8741-5FDEA838890C</attribute>
         <attribute name="url" type="string">http://0.0.0.0:8080/api/thing/077948009020</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
