@@ -4,7 +4,9 @@
     window.BASEURL = 'http://segdeha.com/ineedtobuy.xyz';
 
     window.rafAlert = function (str) {
-        window.requestAnimationFrame(alert(str));
+        window.requestAnimationFrame(function () {
+            alert(str);
+        });
     }
 
     function onDeviceReady() {
