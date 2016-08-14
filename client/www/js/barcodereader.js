@@ -79,8 +79,10 @@ var BarcodeReader = (function (window, document, $, undefined) {
             // clear the 10 second timeout
             clearTimeout(timeout);
 
-            function displayProductModal(data) {
+            function displayProductModal(data, edit) {
                 var barcode = result && result.codeResult && result.codeResult.code || '00000000';
+
+                // TODO if (edit) { put modal in edit mode }
 
                 // save thing_id to the dom element
                 $('#new-product').attr('data-thing-id', data.id);
@@ -90,7 +92,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
 
                 // set product info in modal
                 $('#new-product .header').html(data.name);
-                $('#new-product .content .image').attr('src', data.product_image);
+                $('#new-product .content .image').attr('src', data.product_image || BASEURL + '/assets/img/default-image.png');
 
                 // hide loading indicator
                 dimmer.classList.remove('active');
@@ -99,9 +101,9 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 $('#new-product').modal('show');
             }
 
-            displayProductModal = displayProductModal.bind(this);
+            if(result.codeResult && result.codeResult.code) {
+                displayProductModal = displayProductModal.bind(this);
 
-            if(result.codeResult) {
                 // update status for the user
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
@@ -112,12 +114,13 @@ var BarcodeReader = (function (window, document, $, undefined) {
                         name: 'Unknown Product',
                         product_image: BASEURL + '/assets/img/default-image.png'
                     };
+                    data.product_image = data.product_image || BASEURL + '/assets/img/default-image.png';
                     // preload the image before showing the modal
                     var img = new Image();
                     img.onload = function () {
-                        displayProductModal(data);
+                        displayProductModal(data, true);
                     };
-                    img.src = json.data.product_image;
+                    img.src = data.product_image;
                 });
             }
             else {
