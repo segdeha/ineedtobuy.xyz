@@ -113,6 +113,16 @@ function addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_
     return 'OK';
 }
 
+function getUsernameFromUserId($user_id) {
+    global $pdo;
+
+    $stmt = $pdo->prepare('SELECT username FROM users WHERE id = ?;');
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $user['username'];
+}
+
 function getUserFromUsername($username) {
     global $pdo;
 
