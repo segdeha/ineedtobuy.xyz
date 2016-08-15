@@ -52,7 +52,7 @@ var ReorderableList = (function (window, document, $, undefined) {
             items: '.active .list .item'
         };
         // fetch data from server
-        var getting = $.getJSON(`${BASEURL}/api/things/${USERID}`);
+        var getting = $.getJSON(`${BASEURL}/api/things/${USERID}/${TOKEN}`);
         // var getting = $.getJSON(`${BASEURL}/static/_data.json`);
         getting.done(function (json) {
             window.list = new ReorderableList(selectors, json.data);
@@ -185,7 +185,10 @@ var ReorderableList = (function (window, document, $, undefined) {
                 // save new state to server
                 var posting = $.post({
                     url: `${BASEURL}/api/purchase`,
-                    data: { purchase_id: purchase_id }
+                    data: {
+                        purchase_id: purchase_id,
+                        token: TOKEN
+                    }
                 });
                 posting.fail(function (json) {
                     rafAlert('Saving purchase failed. Try again.');
@@ -220,6 +223,7 @@ var ReorderableList = (function (window, document, $, undefined) {
                 //         user_id: USERID,
                 //         thing_id: thing_id,
                 //         purchase_id: purchase_id,
+                //         token: TOKEN,
                 //         action: 'unpurchase' // ???
                 //     }
                 // });

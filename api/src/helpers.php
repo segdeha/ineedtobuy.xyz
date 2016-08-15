@@ -11,6 +11,7 @@ function generateToken($username, $user_id) {
         'expiry' => time() + (20 * 60), // 20 minutes
     ));
     $signature = PasswordStorage::create_hash($username);
+
     $joined = implode('||', array($header, $payload, $signature));
     $encoded = base64_encode($joined);
     return $encoded;
@@ -31,7 +32,7 @@ function validateToken($token) {
 
             $is_valid_header = HEADER === $parsed['header'];
             $has_not_expired = $elapsed < 0; // expiry in the future
-            $is_valid_signature = PasswordStorage::verify_password($parsed['signature'], $payload['username']);
+            $is_valid_signature = PasswordStorage::verify_password($payload['username'], $parsed['signature']);
 
             $is_valid = $is_valid_header && $has_not_expired && $is_valid_signature;
         }
@@ -61,7 +62,7 @@ function parseToken($token) {
 }
 
 function parseTokenPayload($payload) {
-    $parsed = parse_str($payload);
+    parse_str($payload, $parsed);
 
     if (!isset($parsed['user_id']) || !isset($parsed['expiry'])) {
         return NULL;

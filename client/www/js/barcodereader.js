@@ -29,6 +29,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
             user_id: USERID,
             thing_id: thing_id,
             purchase_id: null,
+            token: TOKEN,
             estimated_number_of_days: number_of_days.value || 7
         };
 
@@ -110,7 +111,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 // update status for the user
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
-                getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}`);
+                getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}/${TOKEN}`);
                 getting.always(function (json) {
                     var data = json.data || {
                         id: 0,
