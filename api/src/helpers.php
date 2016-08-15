@@ -1,6 +1,23 @@
 <?php
 // helper functions
 
+function generateToken($username, $user_id) {
+    $header = 'ineedtobuy.xyz';
+    $payload = 'user_id=' . $user_id . '&expiry=' . (time() + (20 * 60)); // 20 minutes
+    $signature = PasswordStorage::create_hash($username);
+    $joined = implode('||', array($header, $payload, $signature));
+    $encoded = base64_encode($joined);
+    return $encoded;
+}
+
+function validateToken($username, $token) {
+    $decoded = base64_decode($token);
+    $split = explode('||');
+    $signature = $split[2];
+    $is_valid = PasswordStorage::verify_password($signature, $username);
+    return $is_valid;
+}
+
 // based on http://stackoverflow.com/a/36297417/11577
 function dateDifference($time) {
     $time = time() - $time; // to get the time since that moment
