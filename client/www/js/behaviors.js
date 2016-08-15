@@ -9,6 +9,8 @@
         });
     }
 
+    window.rangeInput = new RangeInput('number-of-days');
+
     function onDeviceReady() {
         $('.ui.form').form({
             fields: {
@@ -109,14 +111,7 @@
             }
         });
 
-        var rangeInput = document.querySelector('[name="number-of-days"]');
-        var rangeValue = document.getElementById('number-of-days');
-
-        rangeInput.addEventListener('input', function (evt) {
-            rangeValue.innerHTML = this.value;
-        });
-
-        rangeValue.innerHTML = rangeInput.value;
+        rangeInput.update();
     }
 
     function onDOMContentLoaded() {

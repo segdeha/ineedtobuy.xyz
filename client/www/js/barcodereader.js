@@ -99,6 +99,9 @@ var BarcodeReader = (function (window, document, $, undefined) {
 
                 // show product modal
                 $('#new-product').modal('show');
+
+                // update the range input
+                rangeInput.update();
             }
 
             if(result.codeResult && result.codeResult.code) {
