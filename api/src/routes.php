@@ -38,7 +38,7 @@ $app->post('/login', function ($request, $response) {
 
     if ($is_valid) {
         $succeeded = updateLastLoginDateById($user['id']);
-        $token = generateToken($username, $user['id']);
+        $token = generateToken($user['id']);
     }
     else {
         $response = $response->withStatus(403);
@@ -69,9 +69,13 @@ $app->group('/api', function () use ($app) {
         }
 
         $thing = getThingInfoFromBarcode($barcode);
+        $token = generateToken($user_id);
 
         $data = array(
-            'data' => $thing
+            'data' => array(
+                'thing' => $thing,
+                'token' => $token,
+            )
         );
 
         return $response->withJson($data);
@@ -84,8 +88,13 @@ $app->group('/api', function () use ($app) {
         $things = getListOfThingsFromUserId($user_id);
         $things = array_map('addLastPurchased', $things);
 
+        $token = generateToken($user_id);
+
         $data = array(
-            'data' => $things
+            'data' => array(
+                'things' => $things,
+                'token' => $token,
+            )
         );
 
         return $response->withJson($data);
@@ -109,10 +118,12 @@ $app->group('/api', function () use ($app) {
             $ids = getThingAndUserIdsFromPurchaseId($purchase_id);
 
             if (NULL === $ids) {
-                $data = NULL;
+                $status = NULL;
+                $token = NULL;
             }
             else {
-                $data = addPurchase($ids['user_id'], $ids['thing_id'], $estimated_number_of_days, $predicted_replace_days);
+                $status = addPurchase($ids['user_id'], $ids['thing_id'], $estimated_number_of_days, $predicted_replace_days);
+                $token = generateToken($ids['user_id']);
             }
         }
         // add a new item to the user's list
@@ -123,11 +134,15 @@ $app->group('/api', function () use ($app) {
             }
             $predicted_replace_days = $estimated_number_of_days;
 
-            $data = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
+            $status = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
+            $token = generateToken($user_id);
         }
 
         $data = array(
-            'data' => $data
+            'data' => array(
+                'status' => $status,
+                'token' => $token,
+            )
         );
 
         return $response->withJson($data);

@@ -38,6 +38,8 @@ var BarcodeReader = (function (window, document, $, undefined) {
             data: postData
         });
         posting.done(function (json) {
+            TOKEN = json.data.token;
+
             // close modal
             $('#new-product').modal('hide');
             // reset estimated number of days back to default-image
@@ -45,7 +47,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
             // thing saved successfully, get refreshed list
             window.list.fetch();
         });
-        posting.fail(function (json) {
+        posting.fail(function () {
             rafAlert('Adding product failed. Try again.');
         });
         posting.always(function () {
@@ -113,7 +115,9 @@ var BarcodeReader = (function (window, document, $, undefined) {
 
                 getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}/${TOKEN}`);
                 getting.always(function (json) {
-                    var data = json.data || {
+                    TOKEN = json.data.token;
+
+                    var data = json.data.thing || {
                         id: 0,
                         name: 'Unknown Product',
                         product_image: BASEURL + '/assets/img/default-image.png'

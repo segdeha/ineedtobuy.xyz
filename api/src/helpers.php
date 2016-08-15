@@ -3,7 +3,9 @@
 
 define('HEADER', 'ineedtobuy.xyz');
 
-function generateToken($username, $user_id) {
+function generateToken($user_id) {
+    $username = getUsernameFromUserId($user_id);
+
     $header = HEADER;
     $payload = http_build_query(array(
         'username' => $username,
