@@ -1,10 +1,15 @@
 RewriteEngine On
 
-# Some hosts may require you to use the `RewriteBase` directive.
-# If you need to use the `RewriteBase` directive, it should be the
-# absolute physical path to the directory that contains this htaccess file.
-#
-# RewriteBase /
+# Strip www from all requests
+RewriteCond %{HTTP_HOST} ^www\.
+RewriteRule .* https://ineedtobuy.xyz%{REQUEST_URI} [L,R=301]
 
+# Rewrite to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Allow access to files on the file system
 RewriteCond %{REQUEST_FILENAME} !-f
+
+# Route everything else through index.php
 RewriteRule ^ index.php [QSA,L]
