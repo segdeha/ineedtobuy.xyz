@@ -114,6 +114,7 @@ $app->post('/api/login', function ($request, $response) {
 
     if ($is_valid) {
         $succeeded = updateLastLoginDateById($user['id']);
+        $token = generateToken($username, $user['id']);
     }
     else {
         $response = $response->withStatus(403);
@@ -121,7 +122,10 @@ $app->post('/api/login', function ($request, $response) {
     }
 
     $data = array(
-        'data' => $user
+        'data' => array(
+            'token' => $token,
+            'user' => $user,
+        )
     );
 
     return $response->withJson($data);

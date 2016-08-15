@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 (function (window, document, $, undefined) {
 
-    window.BASEURL = 'http://ineedtobuy.xyz';
+    window.BASEURL = 'https://ineedtobuy.xyz';
 
     window.rafAlert = function (str) {
         window.requestAnimationFrame(function () {
@@ -50,21 +50,24 @@
                     dataType: 'json'
                 });
                 posting.done(function (json) {
-                    if (json.data && json.data.id) {
-                        // set USERID globally
-                        window.USERID = json.data.id;
-
-                        $('#login').fadeOut(250, function () {
-                            $('#lists').addClass('show');
-                            window.requestAnimationFrame(initLists);
-                        });
-                    }
-                    else {
+                    if (!json.data || !json.data.token || !json.data.user) {
                         // release the server connection before showing the alert
                         window.requestAnimationFrame(function () {
                             alert('Unknown user. Try again.');
                         });
+                        return;
                     }
+
+                    // set USERID globally
+                    window.USERID = json.data.user.id;
+
+                    // set TOKEN globally
+                    window.TOKEN = json.data.token;
+
+                    $('#login').fadeOut(250, function () {
+                        $('#lists').addClass('show');
+                        window.requestAnimationFrame(initLists);
+                    });
                 });
                 posting.fail(function (json) {
                     // release the server connection before showing the alert
