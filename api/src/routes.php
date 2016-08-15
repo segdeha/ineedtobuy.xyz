@@ -48,15 +48,30 @@ $app->get('/api/things/{user_id}', function ($request, $response, $args) {
 $app->post('/api/purchase', function ($request, $response) {
     $vars = $request->getParsedBody();
 
-    $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
+    $user_id  = filter_var((int)$vars['user_id'], FILTER_VALIDATE_INT);
+    $thing_id = filter_var((int)$vars['thing_id'], FILTER_VALIDATE_INT);
+    $estimated_number_of_days = filter_var((int)$vars['estimated_number_of_days'], FILTER_VALIDATE_INT);
 
-    $ids = getThingAndUserIdsFromPurchaseId($purchase_id);
+    if (0 === $estimated_number_of_days) {
+        $estimated_number_of_days = 7; // TODO put this value in a constant somewhere
+    }
 
-    if (NULL === $ids) {
-        $data = NULL;
+    $predicted_replace_days = $estimated_number_of_days;
+
+    if (0 === $user_id || 0 === $thing_id) {
+        $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
+
+        $ids = getThingAndUserIdsFromPurchaseId($purchase_id);
+
+        if (NULL === $ids) {
+            $data = NULL;
+        }
+        else {
+            $data = addPurchase($ids['user_id'], $ids['thing_id'], $estimated_number_of_days, $predicted_replace_days);
+        }
     }
     else {
-        $data = addPurchase($ids['user_id'], $ids['thing_id']);
+        $data = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
     }
 
     $data = array(

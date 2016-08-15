@@ -104,11 +104,8 @@ function getThingInfoFromBarcode($barcode) {
     return $thing;
 }
 
-function addPurchase($user_id, $thing_id) {
+function addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days) {
     global $pdo;
-
-    $estimated_number_of_days = 7;
-    $predicted_replace_days = 7;
 
     $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, estimated_number_of_days, predicted_replace_days) VALUES(?, ?, ?, ?);');
     $stmt->execute([$user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days]);

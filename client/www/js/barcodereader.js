@@ -26,7 +26,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
         var number_of_days = document.querySelector('[name="number-of-days"]');
 
         var postData = {
-            owner_id: USERID,
+            user_id: USERID,
             thing_id: thing_id,
             purchase_id: null,
             estimated_number_of_days: number_of_days.value || 7
@@ -118,7 +118,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                     // preload the image before showing the modal
                     var img = new Image();
                     img.onload = function () {
-                        displayProductModal(data, true);
+                        displayProductModal(data, !json.data);
                     };
                     img.src = data.product_image;
                 });
@@ -153,7 +153,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
         var timeout = setTimeout(function () {
             Quagga.stop();
             noBarcode();
-        }, 10000);
+        }, 15000);
     };
 
     /**
