@@ -50,15 +50,13 @@ $app->post('/api/purchase', function ($request, $response) {
 
     $user_id  = filter_var((int)$vars['user_id'], FILTER_VALIDATE_INT);
     $thing_id = filter_var((int)$vars['thing_id'], FILTER_VALIDATE_INT);
-    $estimated_number_of_days = filter_var((int)$vars['estimated_number_of_days'], FILTER_VALIDATE_INT);
 
-    if (0 === $estimated_number_of_days) {
-        $estimated_number_of_days = 7; // TODO put this value in a constant somewhere
-    }
-
-    $predicted_replace_days = $estimated_number_of_days;
-
+    // add purchase of item already in the user's list
     if (0 === $user_id || 0 === $thing_id) {
+        // TODO calculate new numbers for estimated_number_of_days and predicted_replace_days
+        $estimated_number_of_days = 7;
+        $predicted_replace_days = 7;
+
         $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
 
         $ids = getThingAndUserIdsFromPurchaseId($purchase_id);
@@ -70,7 +68,14 @@ $app->post('/api/purchase', function ($request, $response) {
             $data = addPurchase($ids['user_id'], $ids['thing_id'], $estimated_number_of_days, $predicted_replace_days);
         }
     }
+    // add a new item to the user's list
     else {
+        $estimated_number_of_days = filter_var((int)$vars['estimated_number_of_days'], FILTER_VALIDATE_INT);
+        if (0 === $estimated_number_of_days) {
+            $estimated_number_of_days = 7; // TODO put the default value in a constant somewhere
+        }
+        $predicted_replace_days = $estimated_number_of_days;
+
         $data = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
     }
 
