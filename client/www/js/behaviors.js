@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 (function (window, document, $, undefined) {
 
-    window.BASEURL = 'http://segdeha.com/ineedtobuy.xyz';
+    window.BASEURL = 'http://ineedtobuy.xyz';
 
     window.rafAlert = function (str) {
         window.requestAnimationFrame(function () {
