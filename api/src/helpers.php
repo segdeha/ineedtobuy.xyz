@@ -1,8 +1,66 @@
 <?php
 // helper functions
 
+define('HEADER', 'ineedtobuy.xyz');
+
+function parseToken($token) {
+    $decoded = base64_decode($token);
+    $split = explode('||', $decoded);
+
+    if (3 === count($split)) {
+        $header = $split[0];
+        $payload = $split[1];
+        $signature = $split[2];
+
+        return array(
+            'header' => $header,
+            'payload' => $payload,
+            'signature' => $signature,
+        );
+    }
+    else {
+        return NULL;
+    }
+}
+
+function parseTokenPayload($payload) {
+    $pairs = explode('&', $payload);
+    if (2 === count($pairs)) {
+        $user_id = explode('=', $pairs[0]);
+        $expiry = explode('=', $pairs[1]);
+
+        if (2 === count($user_id) && 2 === count($expiry)) {
+            return array(
+                'user_id' => (int)$user_id[1],
+                'expiry' => (int)$expiry[1],
+            );
+        }
+        else {
+            return NULL;
+        }
+    }
+    else {
+        return NULL;
+    }
+}
+
+function getUserIdFromToken($token) {
+    $parsed = parseToken($token);
+
+    if (NULL !== $parsed) {
+        $payload = parseTokenPayload($parsed['payload']);
+
+        if (NULL !== $payload) {
+            return $payload['user_id'];
+        }
+        else {
+            return NULL;
+        }
+    }
+}
+
 function generateToken($username, $user_id) {
-    $header = 'ineedtobuy.xyz';
+    $header = HEADER;
     $payload = 'user_id=' . $user_id . '&expiry=' . (time() + (20 * 60)); // 20 minutes
     $signature = PasswordStorage::create_hash($username);
     $joined = implode('||', array($header, $payload, $signature));
@@ -11,10 +69,26 @@ function generateToken($username, $user_id) {
 }
 
 function validateToken($username, $token) {
-    $decoded = base64_decode($token);
-    $split = explode('||');
-    $signature = $split[2];
-    $is_valid = PasswordStorage::verify_password($signature, $username);
+    $is_valid = false; // start off assuming the token is not valid
+
+    $parsed = parseToken($token);
+
+    if (NULL !== $parsed) {
+        $payload = parseTokenPayload($parsed['payload']);
+
+        if (NULL !== $payload) {
+            // 123 - 124 = -1 // expiry in the future
+            // 123 - 122 =  1 // expiry in the past
+            $elapsed = time() - $payload['expiry'];
+
+            $is_valid_header = HEADER === $parsed['header'];
+            $has_not_expired = $elapsed < 0; // expiry in the future
+            $is_valid_signature = PasswordStorage::verify_password($parsed['signature'], $username);
+
+            $is_valid = $is_valid_header && $has_not_expired && $is_valid_signature;
+        }
+    }
+
     return $is_valid;
 }
 
