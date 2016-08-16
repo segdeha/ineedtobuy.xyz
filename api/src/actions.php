@@ -26,7 +26,8 @@ function getThingAndUserIdsFromPurchaseId($purchase_id) {
 function getListOfThingsFromUserId($user_id) {
     global $pdo;
 
-    $stmt = $pdo->prepare('SELECT purchases.id AS purchase_id, things.id, thing_id, name, purchase_date, predicted_replace_days, status, product_image, barcode FROM things, purchases WHERE user_id = ? AND things.id = purchases.thing_id GROUP BY thing_id ORDER BY purchases.purchase_date DESC;');
+    // TODO calculate status on the client
+    $stmt = $pdo->prepare('SELECT status, purchases.id AS purchase_id, thing_id, MAX(purchase_date) AS purchase_date, predicted_replace_days, name, product_image, barcode FROM purchases INNER JOIN things ON purchases.thing_id = things.id WHERE user_id = 1 GROUP BY thing_id;');
     $stmt->execute([$user_id]);
     $things = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -104,11 +105,11 @@ function getThingInfoFromBarcode($barcode) {
     return $thing;
 }
 
-function addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days) {
+function addPurchase($user_id, $thing_id, $predicted_replace_days) {
     global $pdo;
 
-    $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, estimated_number_of_days, predicted_replace_days) VALUES(?, ?, ?, ?);');
-    $stmt->execute([$user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days]);
+    $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, predicted_replace_days) VALUES(?, ?, ?, ?);');
+    $stmt->execute([$user_id, $thing_id, $predicted_replace_days]);
 
     return 'OK';
 }

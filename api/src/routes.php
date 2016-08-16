@@ -110,7 +110,6 @@ $app->group('/api', function () use ($app) {
         // add purchase of item already in the user's list
         if (0 === $user_id || 0 === $thing_id) {
             // TODO calculate new numbers for estimated_number_of_days and predicted_replace_days
-            $estimated_number_of_days = 7;
             $predicted_replace_days = 7;
 
             $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
@@ -122,7 +121,7 @@ $app->group('/api', function () use ($app) {
                 $token = NULL;
             }
             else {
-                $status = addPurchase($ids['user_id'], $ids['thing_id'], $estimated_number_of_days, $predicted_replace_days);
+                $status = addPurchase($ids['user_id'], $ids['thing_id'], $predicted_replace_days);
                 $token = generateToken($ids['user_id']);
             }
         }
@@ -132,6 +131,7 @@ $app->group('/api', function () use ($app) {
             if (0 === $estimated_number_of_days) {
                 $estimated_number_of_days = 7; // TODO put the default value in a constant somewhere
             }
+            // user the user's estimate for the first prediction
             $predicted_replace_days = $estimated_number_of_days;
 
             $status = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
