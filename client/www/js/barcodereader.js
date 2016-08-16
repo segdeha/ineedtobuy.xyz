@@ -113,7 +113,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 // update status for the user
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
-                getting = $.getJSON(`${BASEURL}/api/thing/${result.codeResult.code}/${TOKEN}`);
+                getting = $.getJSON(`${BASEURL}/api/thing/${USERID}/${result.codeResult.code}/${TOKEN}`);
                 getting.always(function (json) {
                     TOKEN = json.data.token;
 

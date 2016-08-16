@@ -108,7 +108,7 @@ function getThingInfoFromBarcode($barcode) {
 function addPurchase($user_id, $thing_id, $predicted_replace_days) {
     global $pdo;
 
-    $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, predicted_replace_days) VALUES(?, ?, ?, ?);');
+    $stmt = $pdo->prepare('INSERT INTO purchases (user_id, thing_id, predicted_replace_days) VALUES(?, ?, ?);');
     $stmt->execute([$user_id, $thing_id, $predicted_replace_days]);
 
     return 'OK';

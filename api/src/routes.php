@@ -58,7 +58,9 @@ $app->post('/login', function ($request, $response) {
 // API routes
 $app->group('/api', function () use ($app) {
     // return info about a thing
-    $app->get('/thing/{barcode}/{token}', function ($request, $response, $args) {
+    $app->get('/thing/{user_id}/{barcode}/{token}', function ($request, $response, $args) {
+        $user_id = filter_var((int)$args['user_id'], FILTER_VALIDATE_INT);
+
         $barcode = $args['barcode'];
 
         if (!ctype_digit($barcode)) {
@@ -109,7 +111,8 @@ $app->group('/api', function () use ($app) {
 
         // add purchase of item already in the user's list
         if (0 === $user_id || 0 === $thing_id) {
-            // TODO calculate new numbers for estimated_number_of_days and predicted_replace_days
+            // TODO calculate new numbers for predicted_replace_days
+            // to start, just use the average of the predicted_replace_days
             $predicted_replace_days = 7;
 
             $purchase_id = filter_var((int)$vars['purchase_id'], FILTER_VALIDATE_INT);
