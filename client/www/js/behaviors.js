@@ -77,6 +77,10 @@
                 });
             }
         });
+
+        $('#settings').on('click', function (evt) {
+            $('#settings-modal').modal({ blurring: true }).modal('show');
+        });
     }
 
     function initLists() {

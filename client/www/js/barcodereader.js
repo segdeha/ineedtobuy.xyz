@@ -101,7 +101,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 dimmer.classList.remove('active');
 
                 // show product modal
-                $('#new-product').modal('show');
+                $('#new-product').modal({ blurring: true }).modal('show');
 
                 // update the range input
                 rangeInput.update();
@@ -168,7 +168,8 @@ var BarcodeReader = (function (window, document, $, undefined) {
      * Called if image capture fails
      */
     proto.onCaptureFail = function (message) {
-        rafAlert('Image capture failed because: ' + message);
+        // user probably hit 'cancel', fail silently
+        // rafAlert('Image capture failed because: ' + message);
     };
 
     return BarcodeReader;

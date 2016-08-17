@@ -40,15 +40,18 @@ h1 {
     width: 32px;
 }
 
-/* refresh button */
-#refresh {
+/* buttons */
+.ui.secondary.button {
+    background: #e0e1e2;
+}
+
+#refresh, #settings {
     margin-right: 0;
     position: absolute;
-    right: 0;
     top: 0;
     width: 32px;
 }
-    #refresh i {
+    #refresh i, #settings i {
         background: transparent url(../img/refresh-icon.png) center center no-repeat;
         background-size: 24px 24px;
         display: inline-block;
@@ -61,6 +64,19 @@ h1 {
         #refresh.loading i {
             visibility: hidden;
         }
+
+/* refresh button */
+#refresh {
+    right: 0;
+}
+
+/* settings button */
+#settings {
+    right: 42px;
+}
+    #settings i {
+        background-image: url(../img/settings-icon.png);
+    }
 
 .list {
     position: relative;
