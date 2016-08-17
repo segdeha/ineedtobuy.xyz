@@ -88,12 +88,12 @@ var ReorderableList = (function (window, document, $, undefined) {
             "status": "IMMEDIATELY",
             "estimated_number_of_days": "7",
             "purchase_date": "2016-08-12 15:13:58",
-            "last_purchased": "5 days",
             "predicted_replace_days": "7"
         }
         */
         function buildItem(item) {
             item.status = item.status.toLowerCase();
+            item.last_purchased = moment(item.purchase_date).fromNow();
 
             html += `
                 <div class="item" data-thing-id="${item.thing_id}" data-purchase-id="${item.purchase_id}" data-src="${item.src}">

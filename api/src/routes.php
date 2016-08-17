@@ -10,6 +10,7 @@ $app->get('/', function ($request, $response, $args) {
     return $this->renderer->render($response, 'index.phtml');
 });
 
+// TODO finish implementing registration
 // $app->post('/register', function ($request, $response) {
 //     $json = $request->getParsedBody();
 //
@@ -75,8 +76,8 @@ $app->group('/api', function () use ($app) {
 
         $data = array(
             'data' => array(
-                'thing' => $thing,
                 'token' => $token,
+                'thing' => $thing,
             )
         );
 
@@ -88,14 +89,12 @@ $app->group('/api', function () use ($app) {
         $user_id = filter_var((int)$args['user_id'], FILTER_VALIDATE_INT);
 
         $things = getListOfThingsFromUserId($user_id);
-        $things = array_map('addLastPurchased', $things);
-
-        $token = generateToken($user_id);
+        $token  = generateToken($user_id);
 
         $data = array(
             'data' => array(
+                'token'  => $token,
                 'things' => $things,
-                'token' => $token,
             )
         );
 
@@ -143,8 +142,8 @@ $app->group('/api', function () use ($app) {
 
         $data = array(
             'data' => array(
+                'token'  => $token,
                 'status' => $status,
-                'token' => $token,
             )
         );
 
