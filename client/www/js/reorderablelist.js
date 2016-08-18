@@ -53,15 +53,17 @@ var ReorderableList = (function (window, document, $, undefined) {
         };
         // fetch data from server
         var getting = $.getJSON(`${BASEURL}/api/things/${USERID}/${TOKEN}`);
-        // var getting = $.getJSON(`${BASEURL}/static/_data.json`);
         getting.done(function (json) {
             TOKEN = json.data.token;
 
             window.list = new ReorderableList(selectors, json.data.things);
             list.render();
         });
-        getting.fail(function (json) {
+        getting.fail(function (xhr) {
             rafAlert('Refreshing the list failed. Try again.');
+            if (401 === xhr.status) {
+                window.location = 'index.html';
+            }
         });
         getting.always(function () {
             // delay a quarter second so it’s not so jarring
@@ -194,6 +196,9 @@ var ReorderableList = (function (window, document, $, undefined) {
                 });
                 posting.fail(function (json) {
                     rafAlert('Saving purchase failed. Try again.');
+                    if (401 === xhr.status) {
+                        window.location = 'index.html';
+                    }
                 });
             },
             onUnchecked: function() {
@@ -231,6 +236,9 @@ var ReorderableList = (function (window, document, $, undefined) {
                 // });
                 // posting.fail(function (json) {
                 //     rafAlert('Saving purchase failed. Try again.');
+                //     if (401 === xhr.status) {
+                //         window.location = 'index.html';
+                //     }
                 // });
             }
         });

@@ -3,11 +3,11 @@
 }
 
 #login {
-    align-items: center;
     height: 100%;
     margin-left: 0;
     opacity: 1;
     padding-top: 10px;
+    text-align: center;
     width: 100% !important;
 }
     #login.fade {
@@ -15,6 +15,10 @@
     }
     #login.hide {
         display: none;
+    }
+    #login img {
+        height: 96px;
+        width: 96px;
     }
 
 #lists {
@@ -27,6 +31,26 @@
         display: block;
         opacity: 1;
     }
+
+/* homespun flexbox via http://the-echoplex.net/flexyboxes/ */
+#login {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+    align-items: center;
+}
+
+#login .branding, #login form {
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+}
+
+#login .branding {
+    padding-bottom: 2em;
+}
 
 /* branding element */
 h1 {

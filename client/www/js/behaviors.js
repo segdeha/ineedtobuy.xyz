@@ -1,7 +1,10 @@
 /* jshint esversion: 6 */
 (function (window, document, $, undefined) {
 
+    // globals (yeah, ugh)
     window.BASEURL = 'https://ineedtobuy.xyz';
+    window.USERID  = null;
+    window.TOKEN   = null;
 
     window.rafAlert = function (str) {
         window.requestAnimationFrame(function () {
@@ -59,10 +62,10 @@
                     }
 
                     // set USERID globally
-                    window.USERID = json.data.user.id;
+                    USERID = json.data.user.id;
 
                     // set TOKEN globally
-                    window.TOKEN = json.data.token;
+                    TOKEN = json.data.token;
 
                     $('#login').fadeOut(250, function () {
                         $('#lists').addClass('show');

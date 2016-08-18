@@ -47,8 +47,11 @@ var BarcodeReader = (function (window, document, $, undefined) {
             // thing saved successfully, get refreshed list
             window.list.fetch();
         });
-        posting.fail(function () {
+        posting.fail(function (xhr) {
             rafAlert('Adding product failed. Try again.');
+            if (401 === xhr.status) {
+                window.location = 'index.html';
+            }
         });
         posting.always(function () {
             $button.removeClass('loading');
@@ -114,7 +117,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 dimmer.querySelector('.text').innerHTML = 'Fetching product info…';
 
                 getting = $.getJSON(`${BASEURL}/api/thing/${USERID}/${result.codeResult.code}/${TOKEN}`);
-                getting.always(function (json) {
+                getting.done(function (json) {
                     TOKEN = json.data.token;
 
                     var data = json.data.thing || {
@@ -129,6 +132,11 @@ var BarcodeReader = (function (window, document, $, undefined) {
                         displayProductModal(data, !json.data);
                     };
                     img.src = data.product_image;
+                });
+                getting.fail(function (xhr) {
+                    if (401 === xhr.status) {
+                        window.location = 'index.html';
+                    }
                 });
             }
             else {
