@@ -61,17 +61,18 @@
             <!-- lists -->
             <div class="ui bottom attached tab segment active" data-tab="first">
                 <div class="ui relaxed divided list"></div>
-                <!-- camera button -->
-                <div class="new-product-button-container">
-                    <div class="hump"></div>
-                    <div id="new-product-button"><img src="img/camera-icon.png" alt=""></div>
-                </div>
             </div>
 
             <!-- settings modal -->
             <div id="settings-modal" class="ui large modal">
                 <div class="header">Settings</div>
                 <div class="actions">
+                    <div class="ui left aligned segment scan-barcode">
+                        <a id="link-scan-barcode" href="#">Scan Barcode</a>
+                    </div>
+                    <div class="ui left aligned segment enter-new-product">
+                        <a id="link-enter-new-product" href="#">Enter New Product</a>
+                    </div>
                     <div class="ui left aligned segment logout">
                         <a href="index.html">Sign Out</a>
                     </div>
@@ -94,11 +95,30 @@
             </div>
 
             <!-- new product modal -->
-            <div id="new-product" class="ui large modal" data-thing-id="null">
-                <div class="header">Confirm</div>
+            <div id="new-product" class="ui large modal">
+                <div class="header"><!-- Trader Joe's Organic Peanut Butter --></div>
                 <div class="content">
                     <p><img class="ui small centered image" src="img/default-image.png" alt=""></p>
                     <div>Barcode value: <span id="barcode-result"></span></div>
+                </div>
+                <div class="actions">
+                    <div class="ui left aligned segment">
+                        <p>Number of days to use it up: <span id="number-of-days"></span></p>
+                        <input type="range" name="number-of-days" min="1" max="30" value="7" step="1">
+                    </div>
+                    <div class="ui primary button">Save</div>
+                    <div class="ui cancel button">Cancel</div>
+                </div>
+            </div>
+
+            <!-- manual product modal -->
+            <div id="manual-product" class="ui large modal">
+                <div class="header">
+                    <input type="text" name="new-product-name" value="" placeholder="Product Name">
+                </div>
+                <div class="content">
+                    <p><img class="ui small centered image" src="img/default-image.png" alt=""></p>
+                    <div>Barcode value: <input name="barcode-result" type="number" value="" placeholder="0123456789"></div>
                 </div>
                 <div class="actions">
                     <div class="ui left aligned segment">

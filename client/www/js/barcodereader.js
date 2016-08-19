@@ -11,27 +11,49 @@ var BarcodeReader = (function (window, document, $, undefined) {
      */
     function BarcodeReader() {
         var self = this;
-        $('#new-product .primary.button').click(function (evt) {
-            var $button = $(this);
-            $button.addClass('loading');
-            var thing_id = $('#new-product').attr('data-thing-id');
-            self.saveScannedThing(thing_id, $button);
+        $('#new-product .primary.button').click(function () {
+            self._handleScannedProductClick(this);
+        });
+        $('#manual-product .primary.button').click(function () {
+            self._handleManuallyEnteredProductClick(this)
         });
     }
 
     var proto = BarcodeReader.prototype;
 
-    proto.saveScannedThing = function (thing_id, $button) {
-        var self = this;
-        var number_of_days = document.querySelector('[name="number-of-days"]');
+    proto._handleScannedProductClick = function (button) {
+        var $button = $(button);
+        $button.addClass('loading');
+        var thing_id = $('#new-product').attr('data-thing-id');
+        this.saveNewThing($button, {
+            thing_id: thing_id
+        });
+    };
 
-        var postData = {
+    proto._handleManuallyEnteredProductClick = function (button) {
+        var $button = $(button);
+        $button.addClass('loading');
+        var name = $('#manual-product [name="new-product-name"]').val();
+        var barcode = $('#manual-product [name="barcode-result"]').val();
+        this.saveNewThing($button, {
+            thing_id: null,
+            name: name,
+            barcode: barcode
+        });
+    };
+
+    proto.saveNewThing = function ($button, params) {
+        var $modal = $button.parents('.modal');
+
+        var $number_of_days = $('[name="number-of-days"]', $modal);
+        var number_of_days = $number_of_days.val() || 7;
+
+        var postData = Object.assign({
             user_id: USERID,
-            thing_id: thing_id,
             purchase_id: null,
             token: TOKEN,
-            estimated_number_of_days: number_of_days.value || 7
-        };
+            estimated_number_of_days: number_of_days
+        }, params);
 
         var posting = $.post({
             url: `${BASEURL}/api/purchase`,
@@ -39,11 +61,10 @@ var BarcodeReader = (function (window, document, $, undefined) {
         });
         posting.done(function (json) {
             TOKEN = json.data.token;
-
             // close modal
-            $('#new-product').modal('hide');
-            // reset estimated number of days back to default-image
-            number_of_days.value = 7;
+            $modal.modal('hide');
+            // reset estimated number of days back to default
+            $number_of_days.val(7);
             // thing saved successfully, get refreshed list
             window.list.fetch();
         });

@@ -134,7 +134,7 @@ var ReorderableList = (function (window, document, $, undefined) {
         $(this.selectors.list).html(html);
 
         // get the items after they’ve been inserted into the dom
-        window.requestAnimationFrame(postInsertion.bind(this));
+        raf(postInsertion.bind(this));
     };
 
     /**

@@ -108,8 +108,13 @@ $app->group('/api', function () use ($app) {
         $user_id  = filter_var((int)$vars['user_id'], FILTER_VALIDATE_INT);
         $thing_id = filter_var((int)$vars['thing_id'], FILTER_VALIDATE_INT);
 
+        if (isset($vars['name']) && isset($vars['barcode'])) {
+            $name    = filter_var(trim($vars['name']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $barcode = filter_var(trim($vars['barcode']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        }
+
         // add purchase of item already in the user's list
-        if (0 === $user_id || 0 === $thing_id) {
+        if (isset($vars['purchase_id']) && '' !== $vars['purchase_id']) {
             // TODO calculate new numbers for predicted_replace_days
             // to start, just use the average of the predicted_replace_days
             $predicted_replace_days = 7;
@@ -136,6 +141,12 @@ $app->group('/api', function () use ($app) {
             // user the user's estimate for the first prediction
             $predicted_replace_days = $estimated_number_of_days;
 
+            // add new item
+            if (isset($name) && isset($barcode)) {
+                $thing_id = addItem($name, $barcode);
+            }
+
+            // add purchase record for existing item
             $status = addPurchase($user_id, $thing_id, $estimated_number_of_days, $predicted_replace_days);
             $token = generateToken($user_id);
         }

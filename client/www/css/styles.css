@@ -24,12 +24,12 @@
 #lists {
     display: none;
     opacity: 0;
-    padding-bottom: 50px;
     position: relative;
 }
     #lists.show {
         display: block;
         opacity: 1;
+        padding-bottom: 1em;
     }
 
 /* homespun flexbox via http://the-echoplex.net/flexyboxes/ */

@@ -105,6 +105,15 @@ function getThingInfoFromBarcode($barcode) {
     return $thing;
 }
 
+function addItem($name, $barcode) {
+    global $pdo;
+
+    $stmt = $pdo->prepare('INSERT INTO things (name, barcode) VALUES(?, ?);');
+    $stmt->execute([$name, $barcode]);
+
+    return $pdo->lastInsertId();
+}
+
 function addPurchase($user_id, $thing_id, $predicted_replace_days) {
     global $pdo;
 

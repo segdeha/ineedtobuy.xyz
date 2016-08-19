@@ -6,8 +6,11 @@
     window.USERID  = null;
     window.TOKEN   = null;
 
+    // tired of typing it all out
+    window.raf = window.requestAnimationFrame;
+
     window.rafAlert = function (str) {
-        window.requestAnimationFrame(function () {
+        raf(function () {
             alert(str);
         });
     }
@@ -55,9 +58,7 @@
                 posting.done(function (json) {
                     if (!json.data || !json.data.token || !json.data.user) {
                         // release the server connection before showing the alert
-                        window.requestAnimationFrame(function () {
-                            alert('Unknown user. Try again.');
-                        });
+                        rafAlert('Unknown user. Try again.');
                         return;
                     }
 
@@ -69,14 +70,12 @@
 
                     $('#login').fadeOut(250, function () {
                         $('#lists').addClass('show');
-                        window.requestAnimationFrame(initLists);
+                        raf(initLists);
                     });
                 });
                 posting.fail(function (json) {
                     // release the server connection before showing the alert
-                    window.requestAnimationFrame(function () {
-                        alert('Invalid login. Try again.');
-                    });
+                    rafAlert('Invalid login. Try again.');
                 });
             }
         });
@@ -87,8 +86,17 @@
     }
 
     function initLists() {
+        $('#link-enter-new-product').on('click', function (evt) {
+            evt.preventDefault();
+            $('#manual-product').modal({ blurring: true }).modal('show');
+        });
+
         var barcodeReader = new BarcodeReader();
-        $('#new-product-button').on('click', barcodeReader.capturePhoto.bind(barcodeReader));
+        $('#link-scan-barcode').on('click', function (evt) {
+            evt.preventDefault();
+            $('#settings-modal').modal('hide');
+            raf(barcodeReader.capturePhoto.bind(barcodeReader));
+        });
 
         // fetch the list for the first time
         ReorderableList.prototype.fetch();
@@ -117,7 +125,7 @@
                 $('#product-info .image').attr('src', src);
 
                 // show modal
-                $('#product-info').modal('show');
+                $('#product-info').modal({ blurring: true }).modal('show');
             }
         });
 
