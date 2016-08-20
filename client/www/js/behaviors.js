@@ -15,7 +15,8 @@
         });
     }
 
-    window.rangeInput = new RangeInput('number-of-days');
+    window.newProductRangeInput    = new RangeInput('new-product-number-of-days');
+    window.manualProductRangeInput = new RangeInput('manual-product-number-of-days');
 
     function onDeviceReady() {
         $('.ui.form').form({
@@ -88,6 +89,7 @@
     function initLists() {
         $('#link-enter-new-product').on('click', function (evt) {
             evt.preventDefault();
+            manualProductRangeInput.update();
             $('#manual-product').modal({ blurring: true }).modal('show');
         });
 
@@ -129,7 +131,9 @@
             }
         });
 
-        rangeInput.update();
+        // TODO do these really need to be here?
+        newProductRangeInput.update();
+        manualProductRangeInput.update();
     }
 
     function onDOMContentLoaded() {

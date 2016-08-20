@@ -128,7 +128,7 @@ var BarcodeReader = (function (window, document, $, undefined) {
                 $('#new-product').modal({ blurring: true }).modal('show');
 
                 // update the range input
-                rangeInput.update();
+                newProductRangeInput.update();
             }
 
             if(result.codeResult && result.codeResult.code) {
