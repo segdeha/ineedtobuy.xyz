@@ -14,7 +14,7 @@ define('BASE_DIR', '/usr/home/segdeha/apps/ineedtobuy.xyz');
 
 // echo '<pre>';var_dump($_SERVER);exit;
 
-$is_dev = $_SERVER["SERVER_NAME"] === "0.0.0.0";
+$is_dev = $_SERVER['SERVER_NAME'] === '0.0.0.0';
 
 // DEVELOPMENT
 if ($is_dev) {
