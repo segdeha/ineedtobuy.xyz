@@ -1,11 +1,11 @@
 <?php
 
 // comment out this block to use in production
-if ('0.0.0.0' !== $_SERVER['SERVER_NAME']) {
-    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-    header('Location: /');
-    exit;
-}
+// if ('0.0.0.0' !== $_SERVER['SERVER_NAME']) {
+//     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+//     header('Location: /');
+//     exit;
+// }
 
 define('BASE_DIR', '/usr/home/segdeha/apps/ineedtobuy.xyz');
 $is_dev = $_SERVER['SERVER_NAME'] === '0.0.0.0';
@@ -79,6 +79,7 @@ $users = getUsers();
         <style type="text/css">
         body {
             font: 200 14px/1.5 "Helvetica Neue", Sans-Serif;
+            padding: 0 1em;
         }
         a {
             color: blue;

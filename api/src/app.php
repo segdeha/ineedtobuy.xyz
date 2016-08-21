@@ -49,7 +49,9 @@ function updateUser($user_id, $full_name, $username, $email, $password) {
         return $stmt->execute([$full_name, $username, $email, $user_id]);
     }
     else {
+        $hashed_password = PasswordStorage::create_hash($password);
+
         $stmt = $pdo->prepare('UPDATE users SET full_name = ?, username = ?, email = ?, password = ? WHERE id = ?;');
-        return $stmt->execute([$full_name, $username, $email, $password, $user_id]);
+        return $stmt->execute([$full_name, $username, $email, $hashed_password, $user_id]);
     }
 }
