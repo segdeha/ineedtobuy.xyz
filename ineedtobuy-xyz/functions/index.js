@@ -16,7 +16,7 @@ const functions = require('firebase-functions');
  */
 const calculateEstimate = (lastEstimate, latestInterval, purchaseHistoryLength) => {
     let previousFactor = lastEstimate * purchaseHistoryLength;
-    let latestFactor = latestInterval * purchaseHistoryLength - 1;
+    let latestFactor = latestInterval * (purchaseHistoryLength - 1);
     let totalDivisor = purchaseHistoryLength * 2 - 1;
     return (previousFactor + latestFactor) / totalDivisor;
 };
