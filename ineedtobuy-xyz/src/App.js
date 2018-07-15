@@ -14,7 +14,8 @@ class App extends Component {
         // if we don't, set state of token to null, which should prompt the app to
         // put the user in a "first run" state
         this.state = {
-            token: window.localStorage.getItem('intb-token')
+            token: window.localStorage.getItem('intb-token'),
+            tokenValue: ''
         };
 
         // these are used by the FirstRun component
@@ -32,9 +33,10 @@ class App extends Component {
         // don't submit the form
         evt.preventDefault();
 
-        let tokenValue = document.querySelector('[name="intb-token"]').value;
+        let input = document.querySelector('[name="intb-token"]');
+        let tokenValue = input && input.value;
 
-        if ('' === tokenValue || tokenValue.split(' ').length !== 3) {
+        if (!tokenValue || tokenValue.split(' ').length !== 3) {
             // set state with error value
             this.setState({
                 error: 'Invalid token'
@@ -65,10 +67,12 @@ class App extends Component {
                 path={'purchases'}
                 filter={['token', '==', token]}
                 render={({ isLoading, data }) => {
+                    let { tokenValue } = this.state;
+
                     // if we have no data to work with, put the user in the
                     // onboarding flow
                     if (data.length < 1) {
-                        return <FirstRun onChange={this.onChange} onNext={this.onNext} />;
+                        return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
                     }
 
                     let { estimates, history } = data[0];
