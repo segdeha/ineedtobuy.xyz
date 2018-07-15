@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { FirestoreCollection } from 'react-firestore';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import FirstRun from './components/FirstRun';
+import Purchases from './components/Purchases';
+
 import './App.css';
 
 class App extends Component {
@@ -56,8 +58,7 @@ class App extends Component {
     }
 
     render() {
-        // TODO make app ask for a token (maybe only when you share it with another?)
-        // yeah, so on first run, ask if the user was given a token by another user
+        // TODO on first run, ask if the user was given a token by another user
         // otherwise, just create a token and store it in localStorage
         // let token = 'glory trend mural';
         let { token } = this.state;
@@ -67,6 +68,7 @@ class App extends Component {
                 path={'purchases'}
                 filter={['token', '==', token]}
                 render={({ isLoading, data }) => {
+                    // this helps us control the text input in FirstRun
                     let { tokenValue } = this.state;
 
                     // if we have no token to work with, put the user
@@ -75,24 +77,29 @@ class App extends Component {
                         return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
                     }
 
+                    if (isLoading) {
+                        return (
+                            <main>
+                                <h1>Loading your purchase history…</h1>
+                            </main>
+                        );
+                    }
+
                     let { estimates, history } = data.length > 0 && data[0];
 
-                    return isLoading ? (
-                        <div>
-                            Loading your purchase history…
-                        </div>
-                    ) : (
+                    if (!history) {
+                        return (
+                            <main>
+                                <h1>No purchases yet</h1>
+                            </main>
+                        );
+                    }
+
+                    return (
                         <BrowserRouter>
                             <Switch>
                                 <Route path="/" render={() => (
-                                    <main>
-                                        <h1>iNeedToBuy.xyz</h1>
-                                        <p>Live data:</p>
-                                        <ul>
-                                            <li>History: {history.length}</li>
-                                            <li>Estimates: {estimates.length}</li>
-                                        </ul>
-                                    </main>
+                                    <Purchases estimates={estimates} history={history} />
                                 )} />
                             </Switch>
                         </BrowserRouter>
