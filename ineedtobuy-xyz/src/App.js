@@ -69,13 +69,13 @@ class App extends Component {
                 render={({ isLoading, data }) => {
                     let { tokenValue } = this.state;
 
-                    // if we have no data to work with, put the user in the
-                    // onboarding flow
-                    if (data.length < 1) {
+                    // if we have no token to work with, put the user
+                    // in the onboarding flow
+                    if (!token) {
                         return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
                     }
 
-                    let { estimates, history } = data[0];
+                    let { estimates, history } = data.length > 0 && data[0];
 
                     return isLoading ? (
                         <div>
