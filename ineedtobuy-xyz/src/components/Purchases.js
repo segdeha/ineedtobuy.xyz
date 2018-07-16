@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Purchases extends Component {
     render() {
@@ -12,6 +13,13 @@ class Purchases extends Component {
                     <li>History: {history.length}</li>
                     <li>Estimates: {estimates.length}</li>
                 </ul>
+                <footer>
+                    <p>
+                        <Link to="/add">
+                            Add new thing
+                        </Link>
+                    </p>
+                </footer>
             </main>
         );
     }

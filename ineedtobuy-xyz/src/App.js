@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FirestoreCollection } from 'react-firestore';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
 import Loading from './components/Loading';
 import Purchases from './components/Purchases';
@@ -97,6 +98,7 @@ class App extends Component {
                     return (
                         <BrowserRouter>
                             <Switch>
+                                <Route path="/add" component={AddThing} />
                                 <Route path="/" render={() => (
                                     <Purchases estimates={estimates} history={history} />
                                 )} />
