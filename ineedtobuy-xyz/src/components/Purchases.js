@@ -5,7 +5,7 @@ class Purchases extends Component {
         let { estimates, history } = this.props;
 
         return (
-            <main>
+            <main className="purchases container">
                 <h1>iNeedToBuy.xyz</h1>
                 <p>Live data:</p>
                 <ul>

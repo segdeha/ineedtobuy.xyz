@@ -3,6 +3,7 @@ import { FirestoreCollection } from 'react-firestore';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import FirstRun from './components/FirstRun';
+import Loading from './components/Loading';
 import Purchases from './components/Purchases';
 
 import './App.css';
@@ -79,9 +80,7 @@ class App extends Component {
 
                     if (isLoading) {
                         return (
-                            <main>
-                                <h1>Loading your purchase history…</h1>
-                            </main>
+                            <Loading />
                         );
                     }
 

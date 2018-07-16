@@ -5,7 +5,7 @@ class FirstRun extends Component {
         let { onChange, onNext, tokenValue } = this.props;
 
         return (
-            <main>
+            <main className="first-run container">
                 <h1>Welcome to iNeedToBuy.xyz!</h1>
                 <p>Have a token? Add it below. Otherwise, click “Next” to get started.</p>
                 <form onSubmit={onNext}>
