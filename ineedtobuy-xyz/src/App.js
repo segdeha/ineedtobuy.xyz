@@ -87,20 +87,12 @@ class App extends Component {
 
                     let { estimates, history } = data.length > 0 && data[0];
 
-                    if (!history) {
-                        return (
-                            <main>
-                                <h1>No purchases yet</h1>
-                            </main>
-                        );
-                    }
-
                     return (
                         <BrowserRouter>
                             <Switch>
                                 <Route path="/add" component={AddThing} />
                                 <Route path="/" render={() => (
-                                    <Purchases estimates={estimates} history={history} />
+                                    <Purchases data={data} />
                                 )} />
                             </Switch>
                         </BrowserRouter>
