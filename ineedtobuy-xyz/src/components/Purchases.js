@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
+import moment from 'moment';
+
 /**
  * Structure of a purchase:
  * barcode<Number>
@@ -12,21 +14,25 @@ class Purchases extends Component {
     render() {
         let { data } = this.props;
 
-        let purchases;
+        let daysUntilNextPurchase = (estimated_purchase_interval, last_purchase) => {
+            return moment().to(moment(last_purchase * 1000).add(estimated_purchase_interval, 'days'));
+        };
 
+        let purchases;
         if (data.length > 0) {
+            data.sort((a, b) => {
+                return a.last_purchase > b.last_purchase ? 1 : a.last_purchase < b.last_purchase ? -1 : 0;
+            });
             purchases = (
                 <Fragment>
-                    <p>Live data:</p>
+                    <p>Number of purchases: {data.length}</p>
                     <ul>
-                        <li>Number of purchases: {data.length}</li>
                         {data.map(thing => {
                             let { barcode, estimated_purchase_interval, last_purchase } = thing;
+                            let next_purchase = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
                             return (
-                                <li key={barcode}>
+                                <li className={next_purchase.replace(/\s/g, '-')} key={barcode}>
                                     Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
-                                    Estimated purchase interval: {estimated_purchase_interval}<br />
-                                    Timestamp: {(new Date(last_purchase.seconds * 1000)).toString()}<br />
                                 </li>
                             );
                         })}
@@ -42,7 +48,9 @@ class Purchases extends Component {
 
         return (
             <main className="purchases container">
-                <h1>iNeedToBuy.xyz</h1>
+                <header>
+                    <h1>iNeedToBuy.xyz</h1>
+                </header>
                 {purchases}
                 <footer>
                     <p>

@@ -5,7 +5,9 @@ class AddThing extends Component {
     render() {
         return (
             <main className="add-thing container">
-                <h1>iNeedToBuy.xyz</h1>
+                <header>
+                    <h1>iNeedToBuy.xyz</h1>
+                </header>
                 <p>Add a thing</p>
                 <footer>
                     <p>

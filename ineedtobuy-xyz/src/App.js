@@ -86,16 +86,12 @@ class App extends Component {
                         );
                     }
 
-                    let { estimates, history } = data.length > 0 && data[0];
-
                     return (
                         <BrowserRouter>
                             <Switch>
-                                <Route path="/thing/:barcode" render={match => <Thing {...match} />} />
+                                <Route path="/thing/:barcode" render={match => <Thing {...match} data={data} />} />
                                 <Route path="/add" component={AddThing} />
-                                <Route path="/" render={() => (
-                                    <Purchases data={data} />
-                                )} />
+                                <Route path="/" render={() => <Purchases data={data} />} />
                             </Switch>
                         </BrowserRouter>
                     );
