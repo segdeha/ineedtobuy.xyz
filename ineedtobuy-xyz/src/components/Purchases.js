@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
-import moment from 'moment';
+import { daysUntilNextPurchase } from '../lib/dates';
 
 /**
  * Structure of a purchase:
@@ -14,10 +14,6 @@ class Purchases extends Component {
     render() {
         let { data } = this.props;
 
-        let daysUntilNextPurchase = (estimated_purchase_interval, last_purchase) => {
-            return moment().to(moment(last_purchase * 1000).add(estimated_purchase_interval, 'days'));
-        };
-
         let purchases;
         if (data.length > 0) {
             data.sort((a, b) => {
@@ -29,9 +25,11 @@ class Purchases extends Component {
                     <ul>
                         {data.map(thing => {
                             let { barcode, estimated_purchase_interval, last_purchase } = thing;
-                            let next_purchase = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
+                            let next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
+                            let className = next < 4 ? 'soon' : next < 11 ? 'pretty-soon' : 'not-soon';
+
                             return (
-                                <li className={next_purchase.replace(/\s/g, '-')} key={barcode}>
+                                <li className={className} key={barcode}>
                                     Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
                                 </li>
                             );

@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import moment from 'moment';
+import { getLastAndNext } from '../lib/dates';
 
 class Thing extends Component {
     render() {
@@ -9,20 +9,22 @@ class Thing extends Component {
         let { barcode } = match.params;
 
         let thing = data.find(thing => {
-            return thing.barcode === barcode;
+            return thing.barcode === +barcode;
         });
 
-        let mo = moment(thing.last_purchase * 1000);
-
-        let last = mo.format('D MMMM');
-        let next = mo.add(14, 'days').format('D MMMM');
+        let { last_purchase, estimated_purchase_interval } = thing;
+        let { last, next } = getLastAndNext(last_purchase.seconds, estimated_purchase_interval);
 
         return (
             <main className="thing container">
                 <header>
                     <h1>iNeedToBuy.xyz</h1>
                 </header>
-                <p>A thing with barcode {barcode}</p>
+                <p>
+                    A thing with barcode {barcode}<br />
+                    Last purchase: {last}<br />
+                    Next purchase: {next}<br />
+                </p>
                 <footer>
                     <p>
                         <Link to="/">
