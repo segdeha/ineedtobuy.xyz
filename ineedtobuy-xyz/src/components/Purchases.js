@@ -24,7 +24,7 @@ class Purchases extends Component {
                             let { barcode, estimated_purchase_interval, last_purchase } = thing;
                             return (
                                 <li key={barcode}>
-                                    Barcode: {barcode}<br />
+                                    Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
                                     Estimated purchase interval: {estimated_purchase_interval}<br />
                                     Timestamp: {(new Date(last_purchase.seconds * 1000)).toString()}<br />
                                 </li>

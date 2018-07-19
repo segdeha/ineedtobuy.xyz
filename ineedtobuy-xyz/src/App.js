@@ -6,6 +6,7 @@ import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
 import Loading from './components/Loading';
 import Purchases from './components/Purchases';
+import Thing from './components/Thing';
 
 import './App.css';
 
@@ -90,6 +91,7 @@ class App extends Component {
                     return (
                         <BrowserRouter>
                             <Switch>
+                                <Route path="/thing/:barcode" render={match => <Thing {...match} />} />
                                 <Route path="/add" component={AddThing} />
                                 <Route path="/" render={() => (
                                     <Purchases data={data} />
