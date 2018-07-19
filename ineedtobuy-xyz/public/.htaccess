@@ -1,0 +1,4 @@
+# allow routes other than / to work
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([0-9]*)$ /index.html [L,QSA]
