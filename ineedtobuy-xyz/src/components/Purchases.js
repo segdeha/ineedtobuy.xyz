@@ -13,21 +13,26 @@ import { daysUntilNextPurchase } from '../lib/dates';
 class Purchases extends Component {
     render() {
         let { data } = this.props;
-
         let purchases;
+
         if (data.length > 0) {
-            data.sort((a, b) => {
-                return a.last_purchase > b.last_purchase ? 1 : a.last_purchase < b.last_purchase ? -1 : 0;
+            let things = data.map(thing => {
+                let { estimated_purchase_interval, last_purchase } = thing;
+                thing.next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
+                thing.className = thing.next < 4 ? 'soon' : thing.next < 11 ? 'pretty-soon' : 'not-soon';
+                return thing;
             });
+
+            things.sort((a, b) => {
+                return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
+            });
+
             purchases = (
                 <Fragment>
                     <p>Number of purchases: {data.length}</p>
                     <ul>
-                        {data.map(thing => {
-                            let { barcode, estimated_purchase_interval, last_purchase } = thing;
-                            let next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
-                            let className = next < 4 ? 'soon' : next < 11 ? 'pretty-soon' : 'not-soon';
-
+                        {things.map(thing => {
+                            let { className, barcode } = thing;
                             return (
                                 <li className={className} key={barcode}>
                                     Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
