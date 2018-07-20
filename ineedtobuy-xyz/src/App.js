@@ -69,6 +69,10 @@ class App extends Component {
         return (
             <FirestoreCollection
                 path={'purchases'}
+                // the sort in the query is an optimization
+                // the list will still sort correctly without this
+                // the sort requires an index in firestore
+                sort='last_purchase:desc,estimated_purchase_interval'
                 filter={['token', '==', token]}
                 render={({ isLoading, data }) => {
                     // this helps us control the text input in FirstRun
