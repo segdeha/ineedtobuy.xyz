@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { FirestoreCollection } from 'react-firestore';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
-import Loading from './components/Loading';
 import Purchases from './components/Purchases';
 import Thing from './components/Thing';
 
@@ -63,44 +61,22 @@ class App extends Component {
     render() {
         // TODO on first run, ask if the user was given a token by another user
         // otherwise, just create a token and store it in localStorage
-        // let token = 'glory trend mural';
-        let { token } = this.state;
+        // tokenValue helps us control the text input in FirstRun
+        let { token, tokenValue } = this.state;
+
+        // if we have no token to work with, put the user in the onboarding flow
+        if (!token) {
+            return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
+        }
 
         return (
-            <FirestoreCollection
-                path={'purchases'}
-                // the sort in the query is an optimization
-                // the list will still sort correctly without this
-                // the sort requires an index in firestore
-                sort='last_purchase:desc,estimated_purchase_interval'
-                filter={['token', '==', token]}
-                render={({ isLoading, data }) => {
-                    // this helps us control the text input in FirstRun
-                    let { tokenValue } = this.state;
-
-                    // if we have no token to work with, put the user
-                    // in the onboarding flow
-                    if (!token) {
-                        return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
-                    }
-
-                    if (isLoading) {
-                        return (
-                            <Loading />
-                        );
-                    }
-
-                    return (
-                        <BrowserRouter>
-                            <Switch>
-                                <Route path="/thing/:barcode" render={match => <Thing {...match} data={data} />} />
-                                <Route path="/add" component={AddThing} />
-                                <Route path="/" render={() => <Purchases data={data} />} />
-                            </Switch>
-                        </BrowserRouter>
-                    );
-                }}
-            />
+            <BrowserRouter>
+                <Switch>
+                    <Route path="/thing/:barcode" render={match => <Thing {...match} token={token} />} />
+                    <Route path="/add" component={AddThing} />
+                    <Route path="/" render={() => <Purchases token={token} />} />
+                </Switch>
+            </BrowserRouter>
         );
     }
 }
