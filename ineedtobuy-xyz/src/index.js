@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import firebase from './lib/firebase.js';
+import { fb as firebase } from './lib/firebase.js';
 import { FirestoreProvider } from 'react-firestore';
 
 import App from './App';

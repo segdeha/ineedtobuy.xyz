@@ -20,5 +20,9 @@ fb.firestore().settings({
     timestampsInSnapshots: true
 });
 
-// Export Firebase.
-export default fb;
+const Timestamp = fb.firebase_.firestore.Timestamp;
+
+export {
+    fb,
+    Timestamp
+};

@@ -21,17 +21,25 @@ const calculateEstimate = (lastEstimate, latestInterval, purchaseHistoryLength) 
     return (previousFactor + latestFactor) / totalDivisor;
 };
 
-exports.updateNextPurchaseEstimate = functions.https.onRequest((request, response) => {});
-
-// we can either trigger on an HTTP request (as above) or potentially on a write event
-// to firestore itself (the latter might be preferably, actually)
+// we are only concerned with updates to existing purchase documents
+exports.updateNextPurchaseEstimate = functions.firestore
+    .document('purchases/{id}')
+    .onUpdate((change, context) => {
+        // context.params.id
+        // const newValue = change.after.data();
+        // const previousValue = change.before.data();
+        // const number_of_purchases = change.before.get('number_of_purchases')
+        // return change.after.ref.set({
+        //     number_of_purchases: number_of_purchases + 1
+        // }, {merge: true});
+    });
 
 /*
 
 when a write action takes place, the following should happen:
  - calculate a new next purchase estimate for the item(s) written
-     - if there is only 1 event in the history for an item, next purchase is the default (2 weeks?)
-     - when there are 2 or more events, next purchase is the weighted average interval
+     - if there is only 1 purchase in the history for an item, next purchase is the default (2 weeks)
+     - when there are 2 or more purchases,estimated next purchase is the weighted average interval
          - adjust for quantity? is it an interval of time per unit of thing?
          - need to handle the case where a seldom bought item will always be at the top of the list
              - if the last purchase is more than 6 weeks, put it at the bottom?

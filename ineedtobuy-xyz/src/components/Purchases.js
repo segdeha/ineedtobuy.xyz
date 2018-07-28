@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FirestoreCollection } from 'react-firestore';
 
-import { daysUntilNextPurchase } from '../lib/dates';
+import { daysSinceLastPurchase, daysUntilNextPurchase } from '../lib/dates';
+import calculateEstimate from '../lib/estimates';
+import { Timestamp } from '../lib/firebase.js';
 
 import Loading from './Loading';
 
@@ -14,6 +16,45 @@ import Loading from './Loading';
  * token<String>
  */
 class Purchases extends Component {
+    constructor(props) {
+        super(props);
+        this.onPurchase = this.onPurchase.bind(this);
+    }
+
+    onPurchase(thing, snapshot) {
+        let {
+            barcode,
+            estimated_purchase_interval,
+            id,
+            last_purchase,
+            number_of_purchases,
+            token
+        } = thing;
+
+        let doc;
+        snapshot.docs.forEach(docCandidate => {
+            if (id === docCandidate.id) {
+                doc = docCandidate;
+                return;
+            }
+        });
+
+        let now = +new Date;
+        let seconds = Math.round(now / 1000);
+        let days_since_last_purchase = daysSinceLastPurchase(last_purchase.seconds, now);
+        let days_until_next_purchase = calculateEstimate(estimated_purchase_interval, days_since_last_purchase, number_of_purchases);
+        let new_data = {
+            barcode,
+            estimated_purchase_interval: days_until_next_purchase,
+            last_purchase: new Timestamp(seconds, 0),
+            number_of_purchases: number_of_purchases + 1,
+            token
+        };
+
+        // save new data to firestore
+        doc.ref.set(new_data);
+    }
+
     render() {
         let { token } = this.props;
 
@@ -25,7 +66,7 @@ class Purchases extends Component {
                 // the sort requires an index in firestore
                 sort='last_purchase:desc,estimated_purchase_interval'
                 filter={['token', '==', token]}
-                render={({ isLoading, data }) => {
+                render={({ isLoading, data, snapshot }) => {
                     let purchases;
 
                     // bail early if we're still waiting for data
@@ -52,10 +93,16 @@ class Purchases extends Component {
                                 <p>Number of purchases: {data.length}</p>
                                 <ul>
                                     {things.map(thing => {
-                                        let { className, barcode } = thing;
+                                        let {
+                                            barcode,
+                                            className
+                                        } = thing;
                                         return (
                                             <li className={className} key={barcode}>
-                                                Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
+                                                Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link>
+                                                <button onClick={() => { this.onPurchase(thing, snapshot) }}>
+                                                    Bought it!
+                                                </button>
                                             </li>
                                         );
                                     })}

@@ -20,6 +20,15 @@ let getLastAndNext = (last_purchase, estimated_purchase_interval, format=true) =
     return { last, next };
 };
 
+let daysSinceLastPurchase = (last_purchase, current_purchase) => {
+    let ms = last_purchase * 1000;
+
+    let last = moment(ms);
+    let current = moment(current_purchase);
+
+    return current.diff(last, 'days');
+};
+
 let daysUntilNextPurchase = (estimated_purchase_interval, last_purchase) => {
     let { next } = getLastAndNext(last_purchase, estimated_purchase_interval, false);
     return next.diff(moment(), 'days');
@@ -27,5 +36,6 @@ let daysUntilNextPurchase = (estimated_purchase_interval, last_purchase) => {
 
 export {
     getLastAndNext,
+    daysSinceLastPurchase,
     daysUntilNextPurchase
 };
