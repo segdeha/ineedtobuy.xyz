@@ -73,7 +73,7 @@ class App extends Component {
             <BrowserRouter>
                 <Switch>
                     <Route path="/thing/:barcode" render={match => <Thing {...match} token={token} />} />
-                    <Route path="/add" component={AddThing} />
+                    <Route path="/add" render={() => <AddThing token={token} />} />
                     <Route path="/" render={() => <Purchases token={token} />} />
                 </Switch>
             </BrowserRouter>

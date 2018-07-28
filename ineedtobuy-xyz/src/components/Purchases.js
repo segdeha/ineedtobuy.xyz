@@ -23,12 +23,10 @@ class Purchases extends Component {
 
     onPurchase(thing, snapshot) {
         let {
-            barcode,
             estimated_purchase_interval,
             id,
             last_purchase,
-            number_of_purchases,
-            token
+            number_of_purchases
         } = thing;
 
         let doc;
@@ -39,20 +37,18 @@ class Purchases extends Component {
             }
         });
 
-        let now = +new Date;
+        let now = +new Date();
         let seconds = Math.round(now / 1000);
         let days_since_last_purchase = daysSinceLastPurchase(last_purchase.seconds, now);
         let days_until_next_purchase = calculateEstimate(estimated_purchase_interval, days_since_last_purchase, number_of_purchases);
         let new_data = {
-            barcode,
             estimated_purchase_interval: days_until_next_purchase,
             last_purchase: new Timestamp(seconds, 0),
-            number_of_purchases: number_of_purchases + 1,
-            token
+            number_of_purchases: number_of_purchases + 1
         };
 
         // save new data to firestore
-        doc.ref.set(new_data);
+        doc.ref.set(new_data, { merge: true });
     }
 
     render() {

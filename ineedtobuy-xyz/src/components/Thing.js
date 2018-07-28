@@ -8,34 +8,6 @@ import Loading from './Loading';
 import ThingDetails from './ThingDetails';
 
 class Thing extends Component {
-    constructor(props) {
-        super(props);
-
-        let { match, data, firebase } = props;
-
-        this.state = {
-            html: <div className='loading' />
-        };
-
-        // thingDoc
-        //     .get()
-        //     .then(doc => {
-        //         let thing = doc.data();
-        //         let { barcode } = thing;
-
-
-        //         this.setState({
-        //             html: (
-        //                 <p>
-        //                     A thing with barcode {barcode}<br />
-        //                     Last purchase: {last}<br />
-        //                     Next purchase: {next}<br />
-        //                 </p>
-        //             )
-        //         })
-        //     })
-    }
-
     render() {
         let { match, token } = this.props;
 
@@ -43,7 +15,7 @@ class Thing extends Component {
 
         return (
             <FirestoreCollection
-                path={`purchases`}
+                path={'purchases'}
                 filter={[['token', '==', token], ['barcode', '==', +barcode]]}
                 render={({ isLoading, data }) => {
                     let purchases;
@@ -57,7 +29,6 @@ class Thing extends Component {
 
                     if (data.length > 0) {
                         let thing = data[0];
-
                         let { last_purchase, estimated_purchase_interval } = thing;
                         let { last, next } = getLastAndNext(last_purchase.seconds, estimated_purchase_interval);
 
