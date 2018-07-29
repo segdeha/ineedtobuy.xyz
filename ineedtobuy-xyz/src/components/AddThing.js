@@ -13,6 +13,7 @@ class AddThing extends Component {
         this.onImageChange = this.onImageChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onBarcodeChange = this.onBarcodeChange.bind(this);
+        this.onProcessed = this.onProcessed.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             nameValue: '',
@@ -27,32 +28,32 @@ class AddThing extends Component {
         return thing.get(); // return promise
     }
 
+    onProcessed(result) {
+        if (result.codeResult) {
+            let barcode = result.codeResult.code;
+
+            fetchBarcodeInfo(barcode).then(item => {
+                if (item.barcode < 0) {
+                    this.setState({
+                        barcodeValue: barcode
+                    });
+                    alert('Unknown barcode. Enter a name for the item.');
+                }
+                else {
+                    this.setState({
+                        barcodeValue: item.barcode,
+                        nameValue: item.name,
+                        imgSrc: item.image
+                    });
+                }
+            });
+        }
+        else {
+            alert('No barcode detected');
+        }
+    }
+
     onImageChange(evt) {
-        let onProcessed = result => {
-            if (result.codeResult) {
-                let barcode = result.codeResult.code;
-
-                fetchBarcodeInfo(barcode).then(item => {
-                    if (item.barcode < 0) {
-                        this.setState({
-                            barcodeValue: barcode
-                        });
-                        alert('Unknown barcode. Enter a name for the item.');
-                    }
-                    else {
-                        this.setState({
-                            barcodeValue: item.barcode,
-                            nameValue: item.name,
-                            imgSrc: item.image
-                        });
-                    }
-                });
-            }
-            else {
-                alert('No barcode detected');
-            }
-        };
-
         let files = evt.target.files;
         if (files.length > 0) {
             let file = files[0];
@@ -77,8 +78,7 @@ class AddThing extends Component {
                     },
                     locate: true,
                     src: src
-                }, onProcessed);
-
+                }, this.onProcessed);
             }
         }
     }
