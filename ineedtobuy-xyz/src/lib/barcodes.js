@@ -3,17 +3,19 @@ let fetchBarcodeInfo = barcode => {
 
     return fetch(url, { mode: 'cors' })
         .then(response => response.json())
-        .then(items => {
+        .then(result => {
             let item = {
                 barcode: -1 // error state
             };
-            if (items.length > 0) {
+
+            if (result.items.length > 0) {
                 item =  {
                     barcode: barcode,
-                    name: items[0].name,
-                    image: items[0].largeImage && items[0].largeImage.split('?')[0] || '/img/groceries.svg'
+                    name: result.items[0].name,
+                    image: result.items[0].largeImage && result.items[0].largeImage.split('?')[0] || '/img/groceries.svg'
                 };
             }
+
             return item;
         });
 };

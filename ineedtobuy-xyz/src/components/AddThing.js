@@ -35,7 +35,8 @@ class AddThing extends Component {
             fetchBarcodeInfo(barcode).then(item => {
                 if (item.barcode < 0) {
                     this.setState({
-                        barcodeValue: barcode
+                        barcodeValue: barcode,
+                        imgSrc: '/img/groceries.svg'
                     });
                     alert('Unknown barcode. Enter a name for the item.');
                 }
