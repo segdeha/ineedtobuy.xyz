@@ -144,7 +144,7 @@ class AddThing extends Component {
                 </header>
                 <h2>Add a thing</h2>
                 <form onSubmit={this.onSubmit}>
-                    <img src={imgSrc} id="output" style={{
+                    <img src={imgSrc} alt="Barcode capture" id="output" style={{
                         maxWidth: '90vw'
                     }} />
                     <div>
