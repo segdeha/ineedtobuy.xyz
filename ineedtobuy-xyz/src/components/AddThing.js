@@ -7,6 +7,7 @@ import { Timestamp } from '../lib/firebase.js';
 class AddThing extends Component {
     constructor(props) {
         super(props);
+        this.thingExists = this.thingExists.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -14,6 +15,12 @@ class AddThing extends Component {
             nameValue: '',
             barcodeValue: ''
         };
+    }
+
+    thingExists(barcode) {
+        let { firestore } = this.props;
+        let thing = firestore.collection('things').doc(`${barcode}`);
+        return thing.get(); // return promise
     }
 
     onNameChange(evt) {
@@ -49,16 +56,23 @@ class AddThing extends Component {
             token
         };
 
-        let writeBatch = firestore.batch();
-        let purchaseDocRef = firestore.collection('purchases').doc();
-        let thingDocRef = firestore.collection('things').doc(barcode);
+        this.thingExists(barcode)
+            .then(doc => {
+                let writeBatch = firestore.batch();
+                let purchaseDocRef = firestore.collection('purchases').doc();
+                let thingDocRef = firestore.collection('things').doc(barcode);
 
-        writeBatch.set(thingDocRef, new_thing);
-        writeBatch.set(purchaseDocRef, new_purchase);
+                // if the thing is not already in the database, add it
+                if (!doc.exists) {
+                    writeBatch.set(thingDocRef, new_thing);
+                }
 
-        writeBatch.commit().then(() => {
-            console.log('Successfully executed batch.');
-        });
+                writeBatch.set(purchaseDocRef, new_purchase);
+
+                writeBatch.commit().then(() => {
+                    console.log('Successfully executed batch.');
+                });
+            });
     }
 
     render() {
