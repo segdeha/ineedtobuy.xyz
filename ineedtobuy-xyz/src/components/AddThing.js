@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withFirestore } from 'react-firestore';
+import Quagga from 'quagga';
 
 import { Timestamp } from '../lib/firebase.js';
 
@@ -8,12 +9,14 @@ class AddThing extends Component {
     constructor(props) {
         super(props);
         this.thingExists = this.thingExists.bind(this);
+        this.onImageChange = this.onImageChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             nameValue: '',
-            barcodeValue: ''
+            barcodeValue: '',
+            imgSrc: '/img/groceries.svg'
         };
     }
 
@@ -21,6 +24,62 @@ class AddThing extends Component {
         let { firestore } = this.props;
         let thing = firestore.collection('things').doc(`${barcode}`);
         return thing.get(); // return promise
+    }
+
+    onImageChange(evt) {
+        let onProcessed = result => {
+            if (result.codeResult) {
+                // strip leading zeroes from the barcode
+                let barcode = parseInt(`${result.codeResult.code}`, 10);
+                this.thingExists(barcode)
+                    .then(doc => {
+                        if (doc.exists) {
+                            this.setState({
+                                barcodeValue: barcode,
+                                nameValue: doc.data().name
+                            });
+                        }
+                        else {
+                            this.setState({
+                                barcodeValue: barcode
+                            });
+                            alert('Unknown barcode. Enter a name for the item.');
+                        }
+                    });
+            }
+            else {
+                alert('No barcode detected');
+            }
+        };
+
+        let files = evt.target.files;
+        if (files.length > 0) {
+            let file = files[0];
+            if (file.type.match(/^image\//)) {
+                let image = file;
+                let src = URL.createObjectURL(image);
+
+                this.setState({
+                    imgSrc: URL.createObjectURL(image)
+                });
+
+                Quagga.decodeSingle({
+                    decoder: {
+                        // chosen based on https://www.scandit.com/types-barcodes-choosing-right-barcode/
+                        // executed in order
+                        readers: [
+                            'upc_reader',
+                            'upc_e_reader',
+                            'ean_reader',
+                            'ean_8_reader'
+                        ]
+                    },
+                    locate: true,
+                    src: src
+                }, onProcessed);
+
+            }
+        }
     }
 
     onNameChange(evt) {
@@ -76,7 +135,8 @@ class AddThing extends Component {
     }
 
     render() {
-        let { nameValue, barcodeValue } = this.state;
+        let { nameValue, barcodeValue, imgSrc } = this.state;
+
         return (
             <main className="add-thing container">
                 <header>
@@ -84,6 +144,14 @@ class AddThing extends Component {
                 </header>
                 <h2>Add a thing</h2>
                 <form onSubmit={this.onSubmit}>
+                    <img src={imgSrc} id="output" style={{
+                        maxWidth: '90vw'
+                    }} />
+                    <div>
+                        <label>
+                            Scan barcode: <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
+                        </label>
+                    </div>
                     <div>
                         <label>
                             Name: <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Tofu" />
