@@ -4,6 +4,7 @@ import { withFirestore } from 'react-firestore';
 import Quagga from 'quagga';
 
 import { Timestamp } from '../lib/firebase.js';
+import fetchBarcodeInfo from '../lib/barcodes.js';
 
 class AddThing extends Component {
     constructor(props) {
@@ -29,23 +30,23 @@ class AddThing extends Component {
     onImageChange(evt) {
         let onProcessed = result => {
             if (result.codeResult) {
-                // strip leading zeroes from the barcode
-                let barcode = parseInt(`${result.codeResult.code}`, 10);
-                this.thingExists(barcode)
-                    .then(doc => {
-                        if (doc.exists) {
-                            this.setState({
-                                barcodeValue: barcode,
-                                nameValue: doc.data().name
-                            });
-                        }
-                        else {
-                            this.setState({
-                                barcodeValue: barcode
-                            });
-                            alert('Unknown barcode. Enter a name for the item.');
-                        }
-                    });
+                let barcode = result.codeResult.code;
+
+                fetchBarcodeInfo(barcode).then(item => {
+                    if (item.barcode < 0) {
+                        this.setState({
+                            barcodeValue: barcode
+                        });
+                        alert('Unknown barcode. Enter a name for the item.');
+                    }
+                    else {
+                        this.setState({
+                            barcodeValue: item.barcode,
+                            nameValue: item.name,
+                            imgSrc: item.image
+                        });
+                    }
+                });
             }
             else {
                 alert('No barcode detected');
@@ -101,14 +102,15 @@ class AddThing extends Component {
 
         let name = document.querySelector('[name="intb-name"]').value;
         let barcode = document.querySelector('[name="intb-barcode"]').value;
+        let image = document.querySelector('#output').src;
 
         // create data for new docs
-        let new_thing = { name };
+        let new_thing = { barcode, name, image };
 
         let now = +new Date();
         let seconds = Math.round(now / 1000);
         let new_purchase = {
-            barcode: +barcode,
+            barcode: barcode,
             estimated_purchase_interval: 14,
             last_purchase: new Timestamp(seconds, 0),
             number_of_purchases: 1,
