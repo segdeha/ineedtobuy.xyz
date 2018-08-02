@@ -114,7 +114,7 @@ class Purchases extends Component {
 
                     // everything else to be rendered goes here
                     return (
-                        <main className="purchases container">
+                        <main className="purchases full-viewport container">
                             <header>
                                 <h1>iNeedToBuy.xyz</h1>
                             </header>

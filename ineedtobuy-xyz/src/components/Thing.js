@@ -46,7 +46,7 @@ class Thing extends Component {
                     }
 
                     return (
-                        <main className="thing container">
+                        <main className="thing full-viewport container">
                             <header>
                                 <h1>iNeedToBuy.xyz</h1>
                             </header>

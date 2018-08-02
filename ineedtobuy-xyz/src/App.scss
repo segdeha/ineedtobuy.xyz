@@ -17,11 +17,8 @@ body {
 }
 
 .container {
-    bottom: 1rem;
-    left: 1rem;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
+    overflow: auto;
+    padding: 1rem;
 }
 
 @import 'css/AddThing.scss';

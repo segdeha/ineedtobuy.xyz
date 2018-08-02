@@ -146,7 +146,7 @@ class AddThing extends Component {
         let { nameValue, barcodeValue, imgSrc } = this.state;
 
         return (
-            <main className="add-thing container">
+            <main className="add-thing full-viewport container">
                 <header>
                     <h1>iNeedToBuy.xyz</h1>
                 </header>
