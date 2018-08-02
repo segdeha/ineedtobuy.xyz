@@ -9,11 +9,15 @@ let fetchBarcodeInfo = barcode => {
             };
 
             if (result.items.length > 0) {
-                item =  {
-                    barcode: barcode,
-                    name: result.items[0].name,
-                    image: result.items[0].largeImage && result.items[0].largeImage.split('?')[0] || '/img/groceries.svg'
-                };
+                let name = result.items[0].name;
+                let image;
+                if (result.items[0].largeImage) {
+                    image = result.items[0].largeImage.replace(/\?.*/, '');
+                }
+                else {
+                    image = '/img/groceries.svg';
+                }
+                item =  { barcode, name, image };
             }
 
             return item;
