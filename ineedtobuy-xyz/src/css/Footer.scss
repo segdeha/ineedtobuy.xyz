@@ -7,6 +7,7 @@ footer {
     ul {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        grid-gap: 1px;
         line-height: 1;
         list-style: none;
         margin: 0;
