@@ -6,7 +6,7 @@ Your smart shopping list.
 
 The first-run experience isn’t finished. Once it is, you’ll be able to visit [app.ineedtobuy.xyz](https://app.ineedtobuy.xyz) on your phone and get started with no set up.
 
-## Contributing
+## Contribute
 
 You can set up the server to run locally, but with the caveat that barcode lookup will not work (without significant local configuration changes).
 
