@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { withFirestore } from 'react-firestore';
 import Quagga from 'quagga';
 
 import { Timestamp } from '../lib/firebase.js';
 import fetchBarcodeInfo from '../lib/barcodes.js';
+
+import Footer from './Footer';
 
 class AddThing extends Component {
     constructor(props) {
@@ -174,13 +175,7 @@ class AddThing extends Component {
                         <button onClick={this.onSubmit}>Add it</button>
                     </p>
                 </form>
-                <footer>
-                    <p>
-                        <Link to="/">
-                            View purchases
-                        </Link>
-                    </p>
-                </footer>
+                <Footer current="add" />
             </main>
         );
     }

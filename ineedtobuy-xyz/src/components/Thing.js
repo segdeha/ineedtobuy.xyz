@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { FirestoreCollection } from 'react-firestore';
 
 import { getLastAndNext } from '../lib/dates';
 
 import Loading from './Loading';
+import Footer from './Footer';
 import ThingDetails from './ThingDetails';
 
 class Thing extends Component {
@@ -55,13 +55,7 @@ class Thing extends Component {
                                 <hr />
                                 {purchases}
                             </main>
-                            <footer>
-                                <p>
-                                    <Link to="/">
-                                        View purchases
-                                    </Link>
-                                </p>
-                            </footer>
+                            <Footer current="thing" />
                         </main>
                     );
                 }}

@@ -7,6 +7,7 @@ import calculateEstimate from '../lib/estimates';
 import { Timestamp } from '../lib/firebase.js';
 
 import Loading from './Loading';
+import Footer from './Footer';
 
 /**
  * Structure of a purchase:
@@ -119,13 +120,7 @@ class Purchases extends Component {
                                 <h1>iNeedToBuy.xyz</h1>
                             </header>
                             {purchases}
-                            <footer>
-                                <p>
-                                    <Link to="/add">
-                                        Add new thing
-                                    </Link>
-                                </p>
-                            </footer>
+                            <Footer current="purchases" />
                         </main>
                     );
                 }}
