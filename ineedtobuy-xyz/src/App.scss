@@ -17,12 +17,21 @@ body {
 }
 
 .container {
-    overflow: auto;
-    padding: 1rem;
+    section {
+        background: #f0f0f0;
+        bottom: 42px;
+        left: 0;
+        overflow: auto;
+        padding: 1rem;
+        position: absolute;
+        right: 0;
+        top: 51px;
+    }
 }
 
 @import 'css/AddThing.scss';
 @import 'css/FirstRun.scss';
 @import 'css/Footer.scss';
+@import 'css/Header.scss';
 @import 'css/Loading.scss';
 @import 'css/Purchases.scss';

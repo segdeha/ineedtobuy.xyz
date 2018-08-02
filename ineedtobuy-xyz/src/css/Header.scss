@@ -1,0 +1,18 @@
+header {
+    border-bottom: solid 1px #ccc;
+    height: 50px;
+    top: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+
+    a {
+        display: block;
+        text-align: center;
+
+        img {
+            height: 50px;
+            width: auto;
+        }
+    }
+}

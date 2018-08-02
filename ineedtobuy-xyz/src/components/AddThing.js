@@ -5,6 +5,7 @@ import Quagga from 'quagga';
 import { Timestamp } from '../lib/firebase.js';
 import fetchBarcodeInfo from '../lib/barcodes.js';
 
+import Header from './Header';
 import Footer from './Footer';
 
 class AddThing extends Component {
@@ -148,33 +149,31 @@ class AddThing extends Component {
 
         return (
             <main className="add-thing full-viewport container">
-                <header>
-                    <h1>iNeedToBuy.xyz</h1>
-                </header>
-                <h2>Add a thing</h2>
-                <form onSubmit={this.onSubmit}>
-                    <img src={imgSrc} alt="Barcode capture" id="output" style={{
-                        maxWidth: '90vw'
-                    }} />
-                    <div>
-                        <label>
-                            Scan barcode: <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Name: <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Tofu" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Barcode: <input type="number" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} placeholder="1234567890" />
-                        </label>
-                    </div>
-                    <p>
-                        <button onClick={this.onSubmit}>Add it</button>
-                    </p>
-                </form>
+                <Header />
+                <section>
+                    <h2>Add a thing</h2>
+                    <form onSubmit={this.onSubmit}>
+                        <img src={imgSrc} alt="Barcode capture" id="output" />
+                        <div>
+                            <label>
+                                Scan barcode: <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Name: <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Tofu" />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                Barcode: <input type="number" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} placeholder="1234567890" />
+                            </label>
+                        </div>
+                        <p>
+                            <button onClick={this.onSubmit}>Add it</button>
+                        </p>
+                    </form>
+                </section>
                 <Footer current="add" />
             </main>
         );

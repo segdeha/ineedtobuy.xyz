@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FirestoreCollection } from 'react-firestore';
 
@@ -7,6 +7,7 @@ import calculateEstimate from '../lib/estimates';
 import { Timestamp } from '../lib/firebase.js';
 
 import Loading from './Loading';
+import Header from './Header';
 import Footer from './Footer';
 
 /**
@@ -86,7 +87,7 @@ class Purchases extends Component {
                         });
 
                         purchases = (
-                            <Fragment>
+                            <section>
                                 <p>Number of purchases: {data.length}</p>
                                 <ul>
                                     {things.map(thing => {
@@ -104,21 +105,21 @@ class Purchases extends Component {
                                         );
                                     })}
                                 </ul>
-                            </Fragment>
+                            </section>
                         );
                     }
                     else {
                         purchases = (
-                            <p>No purchases just yet.</p>
+                            <section>
+                                <p>No purchases just yet.</p>
+                            </section>
                         );
                     }
 
                     // everything else to be rendered goes here
                     return (
                         <main className="purchases full-viewport container">
-                            <header>
-                                <h1>iNeedToBuy.xyz</h1>
-                            </header>
+                            <Header />
                             {purchases}
                             <Footer current="purchases" />
                         </main>

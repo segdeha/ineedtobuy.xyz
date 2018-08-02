@@ -4,6 +4,7 @@ import { FirestoreCollection } from 'react-firestore';
 import { getLastAndNext } from '../lib/dates';
 
 import Loading from './Loading';
+import Header from './Header';
 import Footer from './Footer';
 import ThingDetails from './ThingDetails';
 
@@ -47,14 +48,12 @@ class Thing extends Component {
 
                     return (
                         <main className="thing full-viewport container">
-                            <header>
-                                <h1>iNeedToBuy.xyz</h1>
-                            </header>
-                            <main>
+                            <Header />
+                            <section>
                                 <ThingDetails barcode={barcode} />
                                 <hr />
                                 {purchases}
-                            </main>
+                            </section>
                             <Footer current="thing" />
                         </main>
                     );

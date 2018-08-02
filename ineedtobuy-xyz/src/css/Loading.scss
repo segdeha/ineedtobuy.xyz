@@ -1,3 +1,13 @@
 .loading {
-    background: white url("/img/loading.gif") center center no-repeat;
+    section {
+        img {
+            display: block;
+            height: 256px;
+            left: 50%;
+            margin: -128px 0 0 -128px;
+            position: absolute;
+            top: 50%;
+            width: auto;
+        }
+    }
 }
