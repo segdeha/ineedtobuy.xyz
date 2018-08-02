@@ -107,6 +107,10 @@ class AddThing extends Component {
         let barcode = document.querySelector('[name="intb-barcode"]').value;
         let image = document.querySelector('#output').src;
 
+        // TODO handle case where there is no barcode
+        // probably should create a UUID and save that as the barcode
+        // so we're always guaranteed a value
+
         // create data for new docs
         let new_thing = { barcode, name, image };
 
