@@ -50,7 +50,7 @@ class AddThing extends Component {
             });
         }
         else {
-            alert('No barcode detected');
+            alert('No barcode detected.');
         }
     }
 
@@ -118,14 +118,19 @@ class AddThing extends Component {
             token
         };
 
+        // TODO handle case where user adds a thing they've already bought
+        // 1. check the thing exists
+        // 2. check for existing purchases
+        // 3. if no existing purchase, process as `new_purchase`
+        // 4. if existing purchases, process as `onPurchase`
         this.thingExists(barcode)
             .then(doc => {
                 let writeBatch = firestore.batch();
                 let purchaseDocRef = firestore.collection('purchases').doc();
-                let thingDocRef = firestore.collection('things').doc(barcode);
 
                 // if the thing is not already in the database, add it
                 if (!doc.exists) {
+                    let thingDocRef = firestore.collection('things').doc(barcode);
                     writeBatch.set(thingDocRef, new_thing);
                 }
 
