@@ -4,7 +4,7 @@ Your smart shopping list.
 
 ## Install
 
-The first-run experience isn’t finished. Once it is, you’ll be able to visit [https://app.ineedtobuy.xyz](app.ineedtobuy.xyz) on your phone and get started with no set up.
+The first-run experience isn’t finished. Once it is, you’ll be able to visit [app.ineedtobuy.xyz](https://app.ineedtobuy.xyz) on your phone and get started with no set up.
 
 ## Contributing
 
