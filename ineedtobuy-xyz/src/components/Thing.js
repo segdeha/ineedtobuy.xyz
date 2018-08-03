@@ -51,8 +51,9 @@ class Thing extends Component {
                             <Header />
                             <section>
                                 <ThingDetails barcode={barcode} />
-                                <hr />
-                                {purchases}
+                                <div className="purchases">
+                                    {purchases}
+                                </div>
                             </section>
                             <Footer current="thing" />
                         </main>

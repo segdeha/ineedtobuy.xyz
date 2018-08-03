@@ -89,7 +89,6 @@ class Purchases extends Component {
 
                         purchases = (
                             <section>
-                                <p>Number of purchases: {data.length}</p>
                                 <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} />
                             </section>
                         );

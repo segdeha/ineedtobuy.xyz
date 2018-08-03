@@ -18,11 +18,13 @@ class ThingDetails extends Component {
                         );
                     }
 
+                    let { name, image } = data;
+
                     return (
-                        <ul>
-                            <li>{data.id}</li>
-                            <li>{data.name}</li>
-                        </ul>
+                        <figure>
+                            <img src={image} alt="" />
+                            <figcaption>{name}</figcaption>
+                        </figure>
                     );
                 }}
             />
