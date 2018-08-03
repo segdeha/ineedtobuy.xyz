@@ -114,7 +114,9 @@ class PurchaseList extends Component {
                             <button className={className} onClick={() => { onPurchase(thing, snapshot) }}>
                                 <img className="bought-it" src="/img/add.svg" alt="Bought it!" />
                             </button>
-                            <img className="thumbnail" src={image} alt={name} />
+                            <figure className="thumbnail">
+                                <img src={image} alt={name} />
+                            </figure>
                             <Link className="detail-link" to={`/thing/${barcode}`}>{name}</Link>
                         </li>
                     );
