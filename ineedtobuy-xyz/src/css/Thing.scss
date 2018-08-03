@@ -3,6 +3,12 @@
         display: grid;
         grid-template-rows: 67% 33%;
 
+        img {
+            margin: 1rem auto;
+            max-height: 33vh;
+            max-width: 100%;
+        }
+
         figcaption {
             padding-bottom: 1rem;
         }

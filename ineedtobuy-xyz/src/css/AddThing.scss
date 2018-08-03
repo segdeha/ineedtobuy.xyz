@@ -2,6 +2,12 @@
     .card {
         padding-bottom: 1rem;
 
+        img {
+            margin: 1rem auto;
+            max-height: 33vh;
+            max-width: 100%;
+        }
+
         label {
             display: block;
             margin: 1rem 0;
