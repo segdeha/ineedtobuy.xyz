@@ -155,24 +155,16 @@ class AddThing extends Component {
             <main className="add-thing full-viewport container">
                 <Header />
                 <section>
-                    <h2>Add a thing</h2>
-                    <form onSubmit={this.onSubmit}>
+                    <form className="card" onSubmit={this.onSubmit}>
+                        <input type="hidden" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} />
                         <img src={imgSrc} alt="Barcode capture" id="output" />
-                        <div>
-                            <label>
-                                Scan barcode: <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                Name: <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Tofu" />
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                Barcode: <input type="number" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} placeholder="1234567890" />
-                            </label>
-                        </div>
+                        <label className="scan-barcode">
+                            Scan barcode
+                            <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
+                        </label>
+                        <label>
+                            <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Enter name of item here" />
+                        </label>
                         <p>
                             <button onClick={this.onSubmit}>Add it</button>
                         </p>

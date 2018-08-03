@@ -1,5 +1,24 @@
 .add-thing {
-    #output {
-        max-height: 40vh;
+    .card {
+        padding-bottom: 1rem;
+
+        label {
+            display: block;
+            margin: 1rem 0;
+        }
+
+        .scan-barcode {
+            background: #ccc;
+            margin: 1rem;
+            padding: 1rem;
+
+            [name="intb-scan"] {
+                display: none;
+            }
+        }
+
+        #output {
+            margin: 1rem 0;
+        }
     }
 }

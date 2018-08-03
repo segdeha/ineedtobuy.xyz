@@ -21,7 +21,7 @@ class ThingDetails extends Component {
                     let { name, image } = data;
 
                     return (
-                        <figure>
+                        <figure className="card">
                             <img src={image} alt="" />
                             <figcaption>{name}</figcaption>
                         </figure>
