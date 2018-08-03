@@ -101,7 +101,7 @@ class PurchaseList extends Component {
         return null === thingsWithDetails ? (
             <Loading />
         ) : (
-            <ul>
+            <ul className="purchases-list">
                 {thingsWithDetails.map(thing => {
                     let {
                         barcode,
@@ -110,13 +110,12 @@ class PurchaseList extends Component {
                         className
                     } = thing;
                     return (
-                        <li className={className} key={barcode}>
-                            <img className="purchase" src={image} alt={name} />
-                            Name: {name}<br />
-                            Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link><br />
-                            <button onClick={() => { onPurchase(thing, snapshot) }}>
-                                Bought it!
+                        <li key={barcode}>
+                            <button className={className} onClick={() => { onPurchase(thing, snapshot) }}>
+                                <img className="bought-it" src="/img/add.svg" alt="Bought it!" />
                             </button>
+                            <img className="thumbnail" src={image} alt={name} />
+                            <Link className="detail-link" to={`/thing/${barcode}`}>{name}</Link>
                         </li>
                     );
                 })}
