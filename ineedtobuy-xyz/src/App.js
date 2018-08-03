@@ -37,7 +37,7 @@ class App extends Component {
         evt.preventDefault();
 
         let input = document.querySelector('[name="intb-token"]');
-        let tokenValue = input && input.value;
+        let tokenValue = input && input.value.trim().toLowerCase();
 
         if (!tokenValue || tokenValue.split(' ').length !== 3) {
             // set state with error value
@@ -66,7 +66,13 @@ class App extends Component {
 
         // if we have no token to work with, put the user in the onboarding flow
         if (!token) {
-            return <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />;
+             return (
+                <BrowserRouter>
+                    <Switch>
+                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />} />;
+                    </Switch>
+                </BrowserRouter>
+             );
         }
 
         return (

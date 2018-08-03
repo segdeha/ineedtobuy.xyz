@@ -64,13 +64,15 @@ class PurchaseList extends Component {
 
                             // set state with values
                             this.setState({ thingsWithDetails });
-                        });
+                        })
+                        .catch(console.log);
                 }
                 else {
                     // set state with values
                     this.setState({ thingsWithDetails });
                 }
-            });
+            })
+            .catch(console.log);
     }
 
     componentDidMount() {
