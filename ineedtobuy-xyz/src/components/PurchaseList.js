@@ -28,7 +28,6 @@ class PurchaseList extends Component {
         Promise.all(promises)
             .then(values => {
                 values.forEach((value, idx) => {
-                    let { name, image } = value;
                     let barcode = barcodes[idx];
                     // if it wasn't cached, we'll ask Firestore for it later
                     if (null === value) {
@@ -36,6 +35,7 @@ class PurchaseList extends Component {
                     }
                     // if it was cached, add the data to the array to be rendered
                     else {
+                        let { name, image } = value;
                         let purchase = purchases.find(purchase => {
                             return barcode === purchase.barcode;
                         });

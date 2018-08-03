@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import localForage from 'localforage';
 
 import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
@@ -17,13 +18,24 @@ class App extends Component {
         // if we don't, set state of token to null, which should prompt the app to
         // put the user in a "first run" state
         this.state = {
-            token: window.localStorage.getItem('intb-token'),
+            token: null,
             tokenValue: ''
         };
 
         // these are used by the FirstRun component
         this.onChange = this.onChange.bind(this);
         this.onNext = this.onNext.bind(this);
+    }
+
+    componentDidMount() {
+        localForage.getItem('intb-token')
+            .then(value => {
+                if (null !== value) {
+                    this.setState({
+                        token: value
+                    });
+                }
+            });
     }
 
     onChange(evt) {
@@ -47,7 +59,7 @@ class App extends Component {
         }
         else {
             // save token to localStorage
-            window.localStorage.setItem('intb-token', tokenValue);
+            localForage.setItem('intb-token', tokenValue);
 
             // set state with token value
             this.setState({
