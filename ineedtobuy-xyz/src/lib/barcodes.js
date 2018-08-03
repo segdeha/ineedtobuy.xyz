@@ -8,7 +8,7 @@ let fetchBarcodeInfo = barcode => {
                 barcode: -1 // error state
             };
 
-            if (result.items.length > 0) {
+            if (result.items && result.items.length > 0) {
                 let name = result.items[0].name;
                 let image;
                 if (result.items[0].largeImage) {
