@@ -9,6 +9,7 @@ import { Timestamp } from '../lib/firebase.js';
 import Loading from './Loading';
 import Header from './Header';
 import Footer from './Footer';
+import PurchaseList from './PurchaseList';
 
 /**
  * Structure of a purchase:
@@ -89,22 +90,7 @@ class Purchases extends Component {
                         purchases = (
                             <section>
                                 <p>Number of purchases: {data.length}</p>
-                                <ul>
-                                    {things.map(thing => {
-                                        let {
-                                            barcode,
-                                            className
-                                        } = thing;
-                                        return (
-                                            <li className={className} key={barcode}>
-                                                Barcode: <Link to={`/thing/${barcode}`}>{barcode}</Link>
-                                                <button onClick={() => { this.onPurchase(thing, snapshot) }}>
-                                                    Bought it!
-                                                </button>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} />
                             </section>
                         );
                     }
@@ -112,6 +98,11 @@ class Purchases extends Component {
                         purchases = (
                             <section>
                                 <p>No purchases just yet.</p>
+                                <p>
+                                    <Link to="/add">
+                                        Add an item
+                                    </Link>
+                                </p>
                             </section>
                         );
                     }
