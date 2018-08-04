@@ -12,7 +12,9 @@ class FirstRun extends Component {
                 <section>
                     <form className="card" onSubmit={onNext}>
                         <h1>Welcome to iNeedToBuy.xyz!</h1>
-                        <p>Have a token? Add it below. Otherwise, click “Next” to get started.</p>
+                        <p>iNeedToBuy.xyz is your smart shopping list.</p>
+                        <p>Have a token? Enter it below to share a shopping list with someone.</p>
+                        <p>Otherwise, tap “Next” to create your shopping list.</p>
                         <label>
                             <input type="text" name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Token" autoCapitalize="none" />
                         </label>

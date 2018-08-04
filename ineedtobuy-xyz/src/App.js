@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import localForage from 'localforage';
+import { withFirestore } from 'react-firestore';
 
 import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
 import Purchases from './components/Purchases';
 import Thing from './components/Thing';
+
+import getToken from './lib/tokens';
 
 import './App.css';
 
@@ -25,6 +28,7 @@ class App extends Component {
         // these are used by the FirstRun component
         this.onChange = this.onChange.bind(this);
         this.onNext = this.onNext.bind(this);
+        this.saveToken = this.saveToken.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +49,8 @@ class App extends Component {
     }
 
     onNext(evt) {
+        let { firestore } = this.props;
+
         // don't submit the form
         evt.preventDefault();
 
@@ -52,22 +58,49 @@ class App extends Component {
         let tokenValue = input && input.value.trim().toLowerCase();
 
         if (!tokenValue || tokenValue.split(' ').length !== 3) {
-            // set state with error value
-            this.setState({
-                error: 'Invalid token'
-            });
+            // create new token
+            tokenValue = getToken();
+            // save new user
+            firestore.collection('users')
+                .doc()
+                .set({
+                    display_name: '',
+                    email: '',
+                    token: tokenValue
+                })
+                .then(() => {
+                    this.saveToken(tokenValue);
+                })
+                .catch(console.log);
         }
         else {
-            // save token to localStorage
-            localForage.setItem('intb-token', tokenValue);
-
-            // set state with token value
-            this.setState({
-                error: null,
-                token: tokenValue,
-                tokenValue: ''
-            });
+            // check whether token exists in the database
+            firestore.collection('users')
+                .where('token', '==', tokenValue)
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // if not, alert the user
+                        alert('Invalid token. Try again.');
+                    }
+                    else {
+                        // if so, continue
+                        this.saveToken(tokenValue);
+                    }
+                })
+                .catch(console.log);
         }
+    }
+
+    saveToken(token) {
+        // save token to localStorage
+        localForage.setItem('intb-token', token);
+
+        // set state with token value
+        this.setState({
+            token,
+            tokenValue: token
+        });
     }
 
     render() {
@@ -99,4 +132,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withFirestore(App);
