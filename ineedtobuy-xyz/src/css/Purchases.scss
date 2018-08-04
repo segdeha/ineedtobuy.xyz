@@ -45,17 +45,19 @@
             button {
                 color: white;
                 border: none;
+                border-radius: 50%;
                 cursor: pointer;
                 display: block;
                 float: left;
                 font-family: sans-serif;
                 font-size: 1rem;
-                height: 40px;
-                margin: 0;
-                padding: 5px;
+                height: 30px;
+                margin: 5px;
+                padding: 0;
                 text-align: center;
                 text-decoration: none;
                 transition: transform 150ms ease;
+                width: 30px;
                 -webkit-appearance: none;
                 -moz-appearance: none;
 
