@@ -41,7 +41,7 @@ form {
     }
 
     button,
-    .scan-barcode {
+    .button {
         display: inline-block;
         border: none;
         background: #88c057;
@@ -50,12 +50,13 @@ form {
         font-size: 18px;
         outline: none;
         padding: 0.5rem 1rem;
+        text-decoration: none;
         transition: transform 0.2s;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.26);
     }
 
     button:active,
-    .scan-barcode:active {
+    .button:active {
         outline: none;
         transform: scale(0.9);
     }

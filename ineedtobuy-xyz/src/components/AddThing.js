@@ -203,7 +203,7 @@ class AddThing extends Component {
                     <form className="card" onSubmit={this.onSubmit}>
                         <input type="hidden" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} />
                         <img src={imgSrc} alt="Barcode capture" id="output" />
-                        <label className="scan-barcode">
+                        <label className="button">
                             Scan barcode
                             <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
                         </label>

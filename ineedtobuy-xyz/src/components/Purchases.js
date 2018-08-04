@@ -89,12 +89,14 @@ class Purchases extends Component {
                     else {
                         purchases = (
                             <section>
-                                <p>No purchases just yet.</p>
-                                <p>
-                                    <Link to="/add">
-                                        Add an item
-                                    </Link>
-                                </p>
+                                <div className="card">
+                                    <p>No purchases just yet.</p>
+                                    <form>
+                                        <Link className="button add-item" to="/add">
+                                            Add an item
+                                        </Link>
+                                    </form>
+                                </div>
                             </section>
                         );
                     }
