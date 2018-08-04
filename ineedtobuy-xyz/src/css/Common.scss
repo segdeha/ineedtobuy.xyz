@@ -14,10 +14,12 @@ form {
     input {
         border: none;
         border-bottom: solid 2px #999;
+        border-radius: 0;
         font: 24px/2 Helvetica;
         margin: 1rem 0;
         padding: 0;
         transition: border 0.2s;
+        -webkit-appearance: none;
     }
 
     input:focus {
@@ -52,7 +54,8 @@ form {
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.26);
     }
 
-    button:active {
+    button:active,
+    .scan-barcode:active {
         outline: none;
         transform: scale(0.9);
     }
