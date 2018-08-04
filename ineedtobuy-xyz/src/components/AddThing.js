@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { withFirestore } from 'react-firestore';
 import Quagga from 'quagga';
+import uuidv4 from 'uuid/v4';
 
-import { Timestamp } from '../lib/firebase.js';
-import fetchBarcodeInfo from '../lib/barcodes.js';
+import { daysSinceLastPurchase } from '../lib/dates';
+import fetchBarcodeInfo from '../lib/barcodes';
+import { getNewPurchaseData, getUpdatedPurchaseData } from '../lib/purchase-data';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -26,8 +28,14 @@ class AddThing extends Component {
 
     thingExists(barcode) {
         let { firestore } = this.props;
-        let thing = firestore.collection('things').doc(`${barcode}`);
+        let thing = firestore.collection('things').where('barcode', '==', `${barcode}`);
         return thing.get(); // return promise
+    }
+
+    thingWasPurchasedWithin24Hours(barcode) {
+        let { firestore } = this.props;
+        let purchase = firestore.collection('purchases').where('barcode', '==', `${barcode}`);
+        return purchase.get(); // return promise
     }
 
     onProcessed(result) {
@@ -41,6 +49,7 @@ class AddThing extends Component {
                         imgSrc: '/img/groceries.svg'
                     });
                     alert('Unknown barcode. Enter a name for the item.');
+                    document.querySelector('[name="intb-name"]').focus();
                 }
                 else {
                     this.setState({
@@ -57,6 +66,12 @@ class AddThing extends Component {
     }
 
     onImageChange(evt) {
+        // set values back to original state
+        this.setState({
+            nameValue: '',
+            barcodeValue: '',
+            imgSrc: '/img/groceries.svg'
+        });
         let files = evt.target.files;
         if (files.length > 0) {
             let file = files[0];
@@ -103,26 +118,24 @@ class AddThing extends Component {
 
         let { firestore, token } = this.props;
 
-        let name = document.querySelector('[name="intb-name"]').value;
         let barcode = document.querySelector('[name="intb-barcode"]').value;
+        let name = document.querySelector('[name="intb-name"]').value;
         let image = document.querySelector('#output').src;
 
-        // TODO handle case where there is no barcode
-        // probably should create a UUID and save that as the barcode
-        // so we're always guaranteed a value
+        if (!name) {
+            alert('Enter the name of the item');
+            document.querySelector('[name="intb-name"]').focus();
+            return;
+        }
+
+        // handle case where there is no barcode by creating a UUID and
+        // saving that as the barcode so we're always guaranteed a value
+        if (!barcode) {
+            barcode = uuidv4();
+        }
 
         // create data for new docs
         let new_thing = { barcode, name, image };
-
-        let now = +new Date();
-        let seconds = Math.round(now / 1000);
-        let new_purchase = {
-            barcode: barcode,
-            estimated_purchase_interval: 14,
-            last_purchase: new Timestamp(seconds, 0),
-            number_of_purchases: 1,
-            token
-        };
 
         // TODO handle case where user adds a thing they've already bought
         // 1. check the thing exists
@@ -130,21 +143,53 @@ class AddThing extends Component {
         // 3. if no existing purchase, process as `new_purchase`
         // 4. if existing purchases, process as `onPurchase`
         this.thingExists(barcode)
-            .then(doc => {
+            .then(snapshot => {
                 let writeBatch = firestore.batch();
-                let purchaseDocRef = firestore.collection('purchases').doc();
 
                 // if the thing is not already in the database, add it
-                if (!doc.exists) {
+                if (snapshot.empty) {
                     let thingDocRef = firestore.collection('things').doc(barcode);
                     writeBatch.set(thingDocRef, new_thing);
                 }
 
-                writeBatch.set(purchaseDocRef, new_purchase);
+                this.thingWasPurchasedWithin24Hours(barcode)
+                    .then(snapshot => {
+                        let purchase_data;
+                        let purchaseDocRef;
+                        if (snapshot.empty) {
+                            // new purchase
+                            purchaseDocRef = firestore.collection('purchases').doc();
+                            purchase_data = getNewPurchaseData(barcode, token);
+                        }
+                        else {
+                            let doc = snapshot.docs[0];
+                            let {
+                                estimated_purchase_interval,
+                                last_purchase,
+                                number_of_purchases
+                            } = doc.data();
 
-                writeBatch.commit().then(() => {
-                    console.log('Successfully executed batch.');
-                });
+                            let days = daysSinceLastPurchase(last_purchase);
+
+                            // check last purchase date
+                            // if within 24 hours, do not add another purchase
+                            if (days < 2) {
+                                return;
+                            }
+                            // if more than 24 hours, update doc with new
+                            // last_purchase and number_of_purchases
+                            else {
+                                purchaseDocRef = doc;
+                                purchase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
+                            }
+                        }
+
+                        writeBatch.set(purchaseDocRef, purchase_data);
+
+                        writeBatch.commit().then(() => {
+                            console.log('Successfully executed batch.');
+                        });
+                    });
             });
     }
 

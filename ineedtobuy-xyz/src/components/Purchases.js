@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FirestoreCollection } from 'react-firestore';
 
-import { daysSinceLastPurchase, daysUntilNextPurchase } from '../lib/dates';
-import calculateEstimate from '../lib/estimates';
-import { Timestamp } from '../lib/firebase.js';
+import { daysUntilNextPurchase } from '../lib/dates';
+import { getUpdatedPurchaseData } from '../lib/purchase-data';
 
 import Loading from './Loading';
 import Header from './Header';
@@ -40,18 +39,12 @@ class Purchases extends Component {
             }
         });
 
-        let now = +new Date();
-        let seconds = Math.round(now / 1000);
-        let days_since_last_purchase = daysSinceLastPurchase(last_purchase.seconds, now);
-        let days_until_next_purchase = calculateEstimate(estimated_purchase_interval, days_since_last_purchase, number_of_purchases);
-        let new_data = {
-            estimated_purchase_interval: days_until_next_purchase,
-            last_purchase: new Timestamp(seconds, 0),
-            number_of_purchases: number_of_purchases + 1
-        };
+        if (doc) {
+            let purhcase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
 
-        // save new data to firestore
-        doc.ref.set(new_data, { merge: true });
+            // save new data to firestore
+            doc.ref.set(purhcase_data, { merge: true });
+        }
     }
 
     render() {

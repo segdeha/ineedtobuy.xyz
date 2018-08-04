@@ -20,18 +20,22 @@ let getLastAndNext = (last_purchase, estimated_purchase_interval, format=true) =
     return { last, next };
 };
 
-let daysSinceLastPurchase = (last_purchase, current_purchase) => {
-    let ms = last_purchase * 1000;
-
-    let last = moment(ms);
+/**
+ * Calculate the number of days between the 2 values
+ * @param {Timestamp} last_purchase With property `.seconds`
+ * @param {Number} current_purchase In milliseconds
+ */
+let daysSinceLastPurchase = (last_purchase, current_purchase = +new Date()) => {
+    let last = moment(last_purchase.seconds * 1000);
     let current = moment(current_purchase);
-
-    return current.diff(last, 'days');
+    let diff = current.diff(last, 'days');
+    return diff;
 };
 
 let daysUntilNextPurchase = (estimated_purchase_interval, last_purchase) => {
     let { next } = getLastAndNext(last_purchase, estimated_purchase_interval, false);
-    return next.diff(moment(), 'days');
+    let diff = next.diff(moment(), 'days');
+    return diff;
 };
 
 export {
