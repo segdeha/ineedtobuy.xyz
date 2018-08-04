@@ -2,7 +2,58 @@
     align-items: center;
     background: white;
     margin: 0;
-    padding: 0 1rem;
+    padding: 1rem;
     box-shadow: rgba(0,0,0,0.25) 0 2px 6px;
     text-align: center;
+}
+
+form {
+    // blunt selecter here, which we can get away with because we're only
+    // using text-like inputs for now, will need to change this if we ever
+    // want to use checkboxes or radio buttons
+    input {
+        border: none;
+        border-bottom: solid 2px #999;
+        font: 24px/2 Helvetica;
+        margin: 1rem 0;
+        padding: 0;
+        transition: border 0.2s;
+    }
+
+    input:focus {
+        border-bottom-color: black;
+        outline: none;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #999;
+        font: 24px/2 Helvetica;
+        transition: font-size 0.2s, transform 0.2s;
+    }
+
+    input:focus::-webkit-input-placeholder,
+    input:valid::-webkit-input-placeholder {
+        font-size: 16px;
+        transform: translate3d(0, -2rem, 0);
+        visibility: visible !important;
+    }
+
+    button,
+    .scan-barcode {
+        display: inline-block;
+        border: none;
+        background: #88c057;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        outline: none;
+        padding: 0.5rem 1rem;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.26);
+    }
+
+    button:active {
+        outline: none;
+        transform: scale(0.9);
+    }
 }

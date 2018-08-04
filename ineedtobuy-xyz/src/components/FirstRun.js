@@ -10,11 +10,11 @@ class FirstRun extends Component {
             <main className="first-run full-viewport container">
                 <Header />
                 <section>
-                    <h1>Welcome to iNeedToBuy.xyz!</h1>
-                    <p>Have a token? Add it below. Otherwise, click “Next” to get started.</p>
-                    <form onSubmit={onNext}>
+                    <form className="card" onSubmit={onNext}>
+                        <h1>Welcome to iNeedToBuy.xyz!</h1>
+                        <p>Have a token? Add it below. Otherwise, click “Next” to get started.</p>
                         <label>
-                            Token: <input type="text" name="intb-token" onChange={onChange} value={tokenValue} placeholder="fancy toad licorice" autoCapitalize="none" />
+                            <input type="text" name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Token" autoCapitalize="none" />
                         </label>
                         <p>
                             <button onClick={onNext}>Next</button>

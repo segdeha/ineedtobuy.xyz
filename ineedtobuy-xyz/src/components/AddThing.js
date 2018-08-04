@@ -208,7 +208,7 @@ class AddThing extends Component {
                             <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
                         </label>
                         <label>
-                            <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} placeholder="Enter name of item here" />
+                            <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
                         </label>
                         <p>
                             <button onClick={this.onSubmit}>Add it</button>

@@ -1,7 +1,5 @@
 .add-thing {
     .card {
-        padding-bottom: 1rem;
-
         img {
             margin: 1rem auto;
             max-height: 33vh;
@@ -14,9 +12,8 @@
         }
 
         .scan-barcode {
-            background: #ccc;
-            margin: 1rem;
-            padding: 1rem;
+            background: #eeaf4b;
+            display: inline-block;
 
             [name="intb-scan"] {
                 display: none;
