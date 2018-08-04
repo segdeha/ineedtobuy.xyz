@@ -79,16 +79,16 @@
 
     /* 0 - 3 days */
     .soon {
-        background: rgba(0,255,0,0.25);
+        background: $buy-it-soon;
     }
 
     /* 4 - 10 days */
     .pretty-soon {
-        background: rgba(0,0,255,0.25);
+        background: $buy-it-pretty-soon;
     }
 
     /* > 10 days */
     .not-soon {
-        background: rgba(255,0,0,0.25);
+        background: $buy-it-not-soon;
     }
 }
