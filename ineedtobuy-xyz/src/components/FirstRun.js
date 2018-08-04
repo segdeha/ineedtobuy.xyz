@@ -14,7 +14,7 @@ class FirstRun extends Component {
                     <p>Have a token? Add it below. Otherwise, click “Next” to get started.</p>
                     <form onSubmit={onNext}>
                         <label>
-                            Token: <input type="text" name="intb-token" onChange={onChange} value={tokenValue} placeholder="fancy toad licorice" autocapitalize="none" />
+                            Token: <input type="text" name="intb-token" onChange={onChange} value={tokenValue} placeholder="fancy toad licorice" autoCapitalize="none" />
                         </label>
                         <p>
                             <button onClick={onNext}>Next</button>
