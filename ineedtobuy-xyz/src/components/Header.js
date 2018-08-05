@@ -29,6 +29,7 @@ https://app.ineedtobuy.xyz/?token=${token}`);
         return (
             <header>
                 <Link className="header-link" to="/" />
+                <Link className="help-link" to="/help" />
                 <a className={`share-link ${className}`} href={`sms:?&body=${smsMsg}`} />
             </header>
         );
