@@ -5,7 +5,7 @@
     background: white;
     margin: 0;
     padding: 1rem;
-    box-shadow: rgba(0,0,0,0.25) 0 2px 6px;
+    box-shadow: $drop-shadow;
     text-align: center;
 }
 
@@ -20,7 +20,7 @@ form {
         font: 24px/2 Helvetica;
         margin: 1rem 0;
         padding: 0;
-        transition: border 0.2s;
+        transition: border $transition-duration;
         -webkit-appearance: none;
     }
 
@@ -32,7 +32,7 @@ form {
     input::-webkit-input-placeholder {
         color: #999;
         font: 24px/2 Helvetica;
-        transition: font-size 0.2s, transform 0.2s;
+        transition: font-size $transition-duration, transform $transition-duration;
     }
 
     input:focus::-webkit-input-placeholder,
@@ -53,13 +53,13 @@ form {
         outline: none;
         padding: 0.5rem 1rem;
         text-decoration: none;
-        transition: transform 0.2s;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.26);
+        transition: transform $transition-duration;
+        box-shadow: $drop-shadow-button;
     }
 
     button:active,
     .button:active {
         outline: none;
-        transform: scale(0.9);
+        transform: $button-scale;
     }
 }

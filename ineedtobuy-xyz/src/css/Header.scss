@@ -1,10 +1,13 @@
+@import './Variables.scss';
+
 header {
-    border-bottom: solid 1px #ccc;
+    box-shadow: $drop-shadow;
     height: 60px;
     top: 0;
     left: 0;
     position: fixed;
     right: 0;
+    z-index: 1; // pull header above card to show box-shadow
 
     a {
         background-position: center center;
@@ -19,8 +22,8 @@ header {
 
     .header-link {
         background-image: url(/img/header.png);
-        left: 50px;
-        right: 50px;
+        left: 45px;
+        right: 45px;
     }
 
     .share-link {

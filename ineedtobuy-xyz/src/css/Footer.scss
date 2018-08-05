@@ -1,7 +1,8 @@
 @import './Variables.scss';
 
 footer {
-    border-top: solid 1px white;
+    background: #a46f3e;
+    box-shadow: $drop-shadow-reversed;
     bottom: 0;
     left: 0;
     position: fixed;
@@ -22,11 +23,16 @@ footer {
                 display: block;
                 padding: 10px;
                 text-align: center;
+                transition: transform $transition-duration;
 
                 img {
                     max-height: 20px;
                     width: auto;
                 }
+            }
+
+            a:active {
+                transform: $button-scale;
             }
         }
 
