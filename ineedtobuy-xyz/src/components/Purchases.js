@@ -20,7 +20,31 @@ import PurchaseList from './PurchaseList';
 class Purchases extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            query: '',
+            queryValue: ''
+        };
+
+        this.onSearch = this.onSearch.bind(this);
         this.onPurchase = this.onPurchase.bind(this);
+    }
+
+    onSearch(evt) {
+        let queryValue = evt.target.value;
+        let state = {
+            query: '',
+            queryValue: ''
+        };
+
+        if (queryValue) {
+            state = {
+                query: queryValue,
+                queryValue
+            };
+        }
+
+        this.setState(state);
     }
 
     onPurchase(thing, snapshot) {
@@ -49,6 +73,7 @@ class Purchases extends Component {
 
     render() {
         let { token } = this.props;
+        let { query, queryValue } = this.state;
 
         return (
             <FirestoreCollection
@@ -69,20 +94,34 @@ class Purchases extends Component {
                     }
 
                     if (data.length > 0) {
-                        let things = data.map(thing => {
+                        let things = data;
+
+                        // narrow the list based on user input
+                        if (query) {
+                            let rgx = new RegExp(query,'i');
+                            things = things.filter(thing => {
+                                return rgx.test(thing.name);
+                            });
+                        }
+
+                        // add next purchase date and class name to each thing
+                        things = things.map(thing => {
                             let { estimated_purchase_interval, last_purchase } = thing;
                             thing.next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
                             thing.className = thing.next < 4 ? 'soon' : thing.next < 11 ? 'pretty-soon' : 'not-soon';
                             return thing;
                         });
 
+                        // sort by how soon the user is estiamted to need to buy the item
                         things.sort((a, b) => {
                             return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
                         });
 
+console.log('Purchases/render', things.length)
+
                         purchases = (
                             <section>
-                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} />
+                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} onSearch={this.onSearch} queryValue={queryValue} />
                             </section>
                         );
                     }

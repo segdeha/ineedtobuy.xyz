@@ -82,6 +82,10 @@ class PurchaseList extends Component {
 
     componentWillReceiveProps(nextProps) {
         let { things } = this.props;
+
+console.log('PurchaseList/componentWillReceiveProps: things.length', things.length)
+console.log('PurchaseList/componentWillReceiveProps: nextProps.things.length', nextProps.things.length)
+
         if (nextProps.things.length !== things.length) {
             this.setState({thingsWithDetails: null});
             this._loadThingDetails(things);
@@ -95,13 +99,18 @@ class PurchaseList extends Component {
     }
 
     render() {
-        let { onPurchase, snapshot } = this.props;
+        let { onPurchase, snapshot, queryValue, onSearch } = this.props;
         let { thingsWithDetails } = this.state;
 
         return null === thingsWithDetails ? (
             <Loading />
         ) : (
             <ul className="purchases-list">
+                <li className="search">
+                    <form>
+                        <input type="text" name="intb-search" value={queryValue} placeholder="Search" onChange={onSearch} />
+                    </form>
+                </li>
                 {thingsWithDetails.map(thing => {
                     let {
                         barcode,
