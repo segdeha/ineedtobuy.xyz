@@ -21,7 +21,7 @@ class App extends Component {
 
         // get token value from query string (share link), if present
         let obj = qs.parse(window.location.search.replace('?', ''));
-        if (obj.token && /^\w+\s\w+\s\w+$/.test(obj.token)) {
+        if (obj.token && this.isValidToken(obj.token)) {
             tokenValue = obj.token;
         }
 
@@ -38,7 +38,12 @@ class App extends Component {
         // these are used by the FirstRun component
         this.onChange = this.onChange.bind(this);
         this.onNext = this.onNext.bind(this);
+        this.onClear = this.onClear.bind(this);
         this.saveToken = this.saveToken.bind(this);
+    }
+
+    isValidToken(token) {
+        return /^\w+\s\w+\s\w+$/.test(token);
     }
 
     componentDidMount() {
@@ -64,11 +69,18 @@ class App extends Component {
         // don't submit the form
         evt.preventDefault();
 
-        let input = document.querySelector('[name="intb-token"]');
-        let tokenValue = input && input.value.trim().toLowerCase();
+        let tokenInput = document.querySelector('[name="intb-token"]');
+        let tokenValue = tokenInput && tokenInput.value.trim().toLowerCase();
 
+        let manualReferralInput = document.querySelector('[name="intb-manual-referral"]');
+        let manualReferralValue = manualReferralInput.value > 0;
+
+        // manual referral without a token
+        if (manualReferralValue && !this.isValidToken(tokenValue)) {
+            alert('Enter a valid share code and try again.');
+        }
         // new user without a token
-        if (!tokenValue || tokenValue.split(' ').length !== 3) {
+        else if (!this.isValidToken(tokenValue)) {
             // create new token
             tokenValue = getToken();
             // save new user
@@ -88,8 +100,29 @@ class App extends Component {
         // TODO figure out how to create a new user when needed
         // currently, if you share a token, you end up sharing a user
         else {
-            this.saveToken(tokenValue);
-        }
+            // check whether token exists in the database
+            firestore.collection('users')
+                .where('token', '==', tokenValue)
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // if not, alert the user
+                        alert('Share code doesn’t exist. Try again.');
+                    }
+                    else {
+                        // if so, continue
+                        this.saveToken(tokenValue);
+                    }
+                })
+                .catch(console.log);        }
+    }
+
+    onClear(evt) {
+        this.setState({
+            token: null,
+            tokenValue: '',
+            referral: false
+        });
     }
 
     saveToken(token) {
@@ -115,7 +148,7 @@ class App extends Component {
                         <Route path="/:tldr">
                             <Redirect to="/" />
                         </Route>
-                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} referral={referral} />} />;
+                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} onClear={this.onClear} tokenValue={tokenValue} referral={referral} />} />;
                     </Switch>
                 </BrowserRouter>
              );
