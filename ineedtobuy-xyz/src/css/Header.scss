@@ -34,6 +34,13 @@ header {
         left: 0;
         top: -6px;
         transform: scaleX(-1); // flip horizontal
+    }
+
+    .help-link {
+        background-image: url(/img/help.png);
+        background-size: auto 30px;
+        bottom: 6px;
+        left: 2px;
         width: 50px;
     }
 

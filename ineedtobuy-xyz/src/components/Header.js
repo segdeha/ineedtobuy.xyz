@@ -10,6 +10,7 @@ class Header extends Component {
             <header>
                 <Link className="header-link" to="/" />
                 <Link className="back-link" to="/" />
+                <Link className="help-link" to="/help" />
                 <a className={`share-link ${className}`} href={`sms:?&body=${smsMsg}`} />
             </header>
         );
