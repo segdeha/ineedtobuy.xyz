@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import localForage from 'localforage';
 import { withFirestore } from 'react-firestore';
+import qs from 'qs';
 
 import AddThing from './components/AddThing';
 import FirstRun from './components/FirstRun';
@@ -16,13 +17,22 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        let tokenValue = '';
+
+        // get token value from query string (share link), if present
+        let obj = qs.parse(window.location.search.replace('?', ''));
+        if (obj.token && /^\w+\s\w+\s\w+$/.test(obj.token)) {
+            tokenValue = obj.token;
+        }
+
         // attempt to get token value from localStorage
         // if we get a token successfully, set state with it
         // if we don't, set state of token to null, which should prompt the app to
         // put the user in a "first run" state
         this.state = {
             token: null,
-            tokenValue: ''
+            tokenValue: tokenValue,
+            referral: tokenValue !== ''
         };
 
         // these are used by the FirstRun component
@@ -57,6 +67,7 @@ class App extends Component {
         let input = document.querySelector('[name="intb-token"]');
         let tokenValue = input && input.value.trim().toLowerCase();
 
+        // new user without a token
         if (!tokenValue || tokenValue.split(' ').length !== 3) {
             // create new token
             tokenValue = getToken();
@@ -73,22 +84,11 @@ class App extends Component {
                 })
                 .catch(console.log);
         }
+        // returning user on a new device or user with a shared token
+        // TODO figure out how to create a new user when needed
+        // currently, if you share a token, you end up sharing a user
         else {
-            // check whether token exists in the database
-            firestore.collection('users')
-                .where('token', '==', tokenValue)
-                .get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        // if not, alert the user
-                        alert('Invalid token. Try again.');
-                    }
-                    else {
-                        // if so, continue
-                        this.saveToken(tokenValue);
-                    }
-                })
-                .catch(console.log);
+            this.saveToken(tokenValue);
         }
     }
 
@@ -104,17 +104,18 @@ class App extends Component {
     }
 
     render() {
-        // TODO on first run, ask if the user was given a token by another user
-        // otherwise, just create a token and store it in localStorage
         // tokenValue helps us control the text input in FirstRun
-        let { token, tokenValue } = this.state;
+        let { token, tokenValue, referral } = this.state;
 
         // if we have no token to work with, put the user in the onboarding flow
         if (!token) {
              return (
                 <BrowserRouter>
                     <Switch>
-                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} />} />;
+                        <Route path="/:tldr">
+                            <Redirect to="/" />
+                        </Route>
+                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} tokenValue={tokenValue} referral={referral} />} />;
                     </Switch>
                 </BrowserRouter>
              );
