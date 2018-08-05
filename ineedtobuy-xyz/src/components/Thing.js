@@ -17,7 +17,7 @@ class Thing extends Component {
         return (
             <FirestoreCollection
                 path={'purchases'}
-                filter={[['token', '==', token], ['barcode', '==', +barcode]]}
+                filter={[['token', '==', token], ['barcode', '==', barcode]]}
                 render={({ isLoading, data }) => {
                     let purchases;
 
