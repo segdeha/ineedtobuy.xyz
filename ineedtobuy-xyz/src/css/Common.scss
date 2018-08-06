@@ -25,10 +25,7 @@ a, a:hover, a:active, a:visited {
 }
 
 form {
-    // blunt selecter here, which we can get away with because we're only
-    // using text-like inputs for now, will need to change this if we ever
-    // want to use checkboxes or radio buttons
-    input {
+    input[type="text"] {
         border: none;
         border-bottom: solid 2px #999;
         border-radius: 0;
@@ -77,5 +74,77 @@ form {
     .button:active {
         outline: none;
         transform: $button-scale;
+    }
+
+    .radioGroup {
+        display: grid;
+        grid-gap: 8px;
+        margin: -1rem 0 2rem 0;
+
+        p {
+            grid-area: caption;
+        }
+
+        .radio {
+            align-items: center;
+            border: solid 2px transparent;
+            box-shadow: $drop-shadow;
+            display: flex;
+            font-weight: bold;
+            justify-content: center;
+            margin: 0;
+            padding: 1rem;
+
+            input[type="radio"] {
+                display: none;
+            }
+        }
+
+        .radio.selected {
+            border: solid 2px rgba(0,0,0,0.33);
+        }
+
+        .radio:nth-of-type(1) {
+            grid-area: choice-1;
+        }
+
+        .radio:nth-of-type(2) {
+            grid-area: choice-2;
+        }
+
+        .radio:nth-of-type(3) {
+            grid-area: choice-3;
+        }
+
+        .soon {
+            background: $buy-it-soon;
+        }
+
+        .pretty-soon {
+            background: $buy-it-pretty-soon;
+        }
+
+        .not-soon {
+            background: $buy-it-not-soon;
+        }
+
+        .soon.selected {
+            background: $buy-it-soon-opaque;
+        }
+
+        .pretty-soon.selected {
+            background: $buy-it-pretty-soon-opaque;
+        }
+
+        .not-soon.selected {
+            background: $buy-it-not-soon-opaque;
+        }
+    }
+
+    .radioGroup.oneByThree {
+        grid-template-areas:
+            "caption caption caption"
+            "choice-1 choice-2 choice-3";
+        grid-template-columns: 1fr 1fr 1fr;
     }
 }

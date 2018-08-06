@@ -17,17 +17,32 @@ class AddThing extends Component {
         imgSrc: '/img/groceries.svg',
         showSuccess: false,
         showError: false,
-        buttonDisabled: false
+        buttonDisabled: false,
+        selectedRadio: 'pretty-soon'
+    };
+
+    radioStates = {
+        selected: {
+            className: 'selected',
+            checked: true
+        },
+        notSelected: {
+            className: '',
+            checked: false
+        }
     };
 
     constructor(props) {
         super(props);
-        this.thingExists = this.thingExists.bind(this);
+
+        this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onImageChange = this.onImageChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
-        this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onProcessed = this.onProcessed.bind(this);
+        this.onRadioClick = this.onRadioClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.thingExists = this.thingExists.bind(this);
+
         this.state = this.initialState;
     }
 
@@ -122,6 +137,12 @@ class AddThing extends Component {
         });
     }
 
+    onRadioClick(evt) {
+        this.setState({
+            selectedRadio: evt.target.value
+        });
+    }
+
     onSubmit(evt) {
         evt.preventDefault();
 
@@ -135,6 +156,7 @@ class AddThing extends Component {
         let barcode = document.querySelector('[name="intb-barcode"]').value;
         let name = document.querySelector('[name="intb-name"]').value;
         let image = document.querySelector('#output').src;
+        let estimate = document.querySelector('[name="intb-estimate"]:checked').value;
 
         if (!name) {
             alert('Enter the name of the item');
@@ -173,7 +195,7 @@ class AddThing extends Component {
                         if (snapshot.empty) {
                             // new purchase
                             purchaseDocRef = firestore.collection('purchases').doc();
-                            purchase_data = getNewPurchaseData(barcode, token);
+                            purchase_data = getNewPurchaseData(barcode, token, estimate);
                         }
                         else {
                             let doc = snapshot.docs[0];
@@ -214,10 +236,42 @@ class AddThing extends Component {
     }
 
     render() {
-        let { nameValue, barcodeValue, imgSrc, showSuccess, showError, buttonDisabled } = this.state;
+        let {
+            nameValue,
+            barcodeValue,
+            imgSrc,
+            showSuccess,
+            showError,
+            buttonDisabled,
+            selectedRadio
+        } = this.state;
 
         let successClass = showSuccess ? 'show': '';
         let errorClass = showError ? 'show': '';
+
+        let radioState;
+        if ('soon' === selectedRadio) {
+            radioState = {
+                soon:this.radioStates.selected,
+                prettySoon: this.radioStates.notSelected,
+                notSoon: this.radioStates.notSelected
+            };
+        }
+        else if ('not-soon' === selectedRadio) {
+            radioState = {
+                soon: this.radioStates.notSelected,
+                prettySoon: this.radioStates.notSelected,
+                notSoon: this.radioStates.selected
+            };
+        }
+        // default is 'pretty-soon'
+        else {
+            radioState = {
+                soon: this.radioStates.notSelected,
+                prettySoon: this.radioStates.selected,
+                notSoon: this.radioStates.notSelected
+            };
+        }
 
         return (
             <main className="add-thing full-viewport container">
@@ -233,6 +287,21 @@ class AddThing extends Component {
                         <label>
                             <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
                         </label>
+                        <div className="radioGroup oneByThree">
+                            <p>How soon do you expect to buy this again?</p>
+                            <label className={`radio soon ${radioState.soon.className}`}>
+                                Soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.soon.checked} name="intb-estimate" value="soon" />
+                            </label>
+                            <label className={`radio pretty-soon ${radioState.prettySoon.className}`}>
+                                Pretty soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.prettySoon.checked} name="intb-estimate" value="pretty-soon" />
+                            </label>
+                            <label className={`radio not-soon ${radioState.notSoon.className}`}>
+                                Not soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.notSoon.checked} name="intb-estimate" value="not-soon" />
+                            </label>
+                        </div>
                         <p>
                             <button disabled={buttonDisabled} onClick={this.onSubmit}>Add it</button>
                         </p>
