@@ -23,9 +23,7 @@ class Header extends Component {
     render() {
         let { token } = this.state;
         let className = token ? 'show' : 'hide';
-        let smsMsg = encodeURI(`Share my shopping list on iNeedToBuy.xyz!
-
-https://app.ineedtobuy.xyz/?token=${token}`);
+        let smsMsg = encodeURI(`Share my shopping list on iNeedToBuy.xyz!\n\nhttps://app.ineedtobuy.xyz/?token=${token}`);
         return (
             <header>
                 <Link className="header-link" to="/" />
