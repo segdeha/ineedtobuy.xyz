@@ -30,11 +30,12 @@ class Thing extends Component {
 
                     if (data.length > 0) {
                         let thing = data[0];
-                        let { last_purchase, estimated_purchase_interval } = thing;
+                        let { last_purchase, estimated_purchase_interval, number_of_purchases } = thing;
                         let { last, next } = getLastAndNext(last_purchase.seconds, estimated_purchase_interval);
 
                         purchases = (
                             <ul>
+                                <li>Number of purchases: {number_of_purchases}</li>
                                 <li>Last purchase: {last}</li>
                                 <li>Next purchase: {next}</li>
                             </ul>
