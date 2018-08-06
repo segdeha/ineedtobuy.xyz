@@ -3,6 +3,7 @@ import { withFirestore } from 'react-firestore';
 import Quagga from 'quagga';
 import uuidv4 from 'uuid/v4';
 
+import { defaultImageSrc } from '../lib/constants';
 import { daysSinceLastPurchase } from '../lib/dates';
 import fetchBarcodeInfo from '../lib/barcodes';
 import { getNewPurchaseData, getUpdatedPurchaseData } from '../lib/purchase-data';
@@ -14,7 +15,7 @@ class AddThing extends Component {
     initialState = {
         nameValue: '',
         barcodeValue: '',
-        imgSrc: '/img/groceries.svg',
+        imgSrc: defaultImageSrc,
         showSuccess: false,
         showError: false,
         buttonDisabled: false,
@@ -66,7 +67,7 @@ class AddThing extends Component {
                 if (item.barcode < 0) {
                     this.setState({
                         barcodeValue: barcode,
-                        imgSrc: '/img/groceries.svg'
+                        imgSrc: defaultImageSrc
                     });
                     alert('Unknown barcode. Enter a name for the item.');
                     document.querySelector('[name="intb-name"]').focus();
@@ -83,7 +84,7 @@ class AddThing extends Component {
         else {
             this.setState({
                 barcodeValue: '',
-                imgSrc: '/img/groceries.svg'
+                imgSrc: defaultImageSrc
             });
             alert('No barcode detected.');
         }
@@ -94,7 +95,7 @@ class AddThing extends Component {
         this.setState({
             nameValue: '',
             barcodeValue: '',
-            imgSrc: '/img/groceries.svg'
+            imgSrc: defaultImageSrc
         });
         let files = evt.target.files;
         if (files.length > 0) {
