@@ -11,6 +11,15 @@ import Header from './Header';
 import Footer from './Footer';
 
 class AddThing extends Component {
+    initialState = {
+        nameValue: '',
+        barcodeValue: '',
+        imgSrc: '/img/groceries.svg',
+        showSuccess: false,
+        showError: false,
+        buttonDisabled: false
+    };
+
     constructor(props) {
         super(props);
         this.thingExists = this.thingExists.bind(this);
@@ -19,11 +28,7 @@ class AddThing extends Component {
         this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onProcessed = this.onProcessed.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.state = {
-            nameValue: '',
-            barcodeValue: '',
-            imgSrc: '/img/groceries.svg'
-        };
+        this.state = this.initialState;
     }
 
     thingExists(barcode) {
@@ -122,6 +127,11 @@ class AddThing extends Component {
 
         let { firestore, token } = this.props;
 
+        // prevent user from submitting something multiple times
+        this.setState({
+            buttonDisabled: true
+        });
+
         let barcode = document.querySelector('[name="intb-barcode"]').value;
         let name = document.querySelector('[name="intb-name"]').value;
         let image = document.querySelector('#output').src;
@@ -192,13 +202,22 @@ class AddThing extends Component {
 
                         writeBatch.commit().then(() => {
                             console.log('Successfully executed batch.');
+                            this.setState({
+                                showSuccess: true
+                            });
+                            setTimeout(() => {
+                                this.setState(this.initialState);
+                            }, 2000);
                         });
                     });
             });
     }
 
     render() {
-        let { nameValue, barcodeValue, imgSrc } = this.state;
+        let { nameValue, barcodeValue, imgSrc, showSuccess, showError, buttonDisabled } = this.state;
+
+        let successClass = showSuccess ? 'show': '';
+        let errorClass = showError ? 'show': '';
 
         return (
             <main className="add-thing full-viewport container">
@@ -215,9 +234,19 @@ class AddThing extends Component {
                             <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
                         </label>
                         <p>
-                            <button onClick={this.onSubmit}>Add it</button>
+                            <button disabled={buttonDisabled} onClick={this.onSubmit}>Add it</button>
                         </p>
                     </form>
+                    <div className={`result success-adding-thing ${successClass}`}>
+                        <p>
+                            <strong>Item added successfully!</strong>
+                        </p>
+                    </div>
+                    <div className={`result problem-adding-thing ${errorClass}`}>
+                        <p>
+                            <strong>Problem adding item. Try again.</strong>
+                        </p>
+                    </div>
                 </section>
                 <Footer current="add" />
             </main>

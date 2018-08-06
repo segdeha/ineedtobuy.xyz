@@ -77,7 +77,7 @@ class FirstRun extends Component {
                         <h1>Welcome to your smart shopping list!</h1>
                         {instructions}
                         <label>
-                            <input style={{ textAlign: 'center' }} type={inputType} disabled={inputDisabled} name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Share Code" autoCapitalize="none" />
+                            <input type={inputType} disabled={inputDisabled} name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Share Code" autoCapitalize="none" />
                         </label>
                         <p>
                             <button onClick={onNext}>{buttonText}</button>

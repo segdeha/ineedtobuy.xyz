@@ -53,13 +53,18 @@ class PurchaseList extends Component {
                     Promise.all(promises)
                         .then(values => {
                             values.forEach((value) => {
-                                let { barcode, name, image } = value.data();
-                                let purchase = purchases.find(purchase => {
-                                    return barcode === purchase.barcode;
-                                });
-                                localForage.setItem(barcode, { name, image });
-                                let thing = Object.assign(purchase, { name, image });
-                                thingsWithDetails.push(thing);
+                                if (value && value.barcode) {
+                                    let { barcode, name, image } = value.data();
+                                    let purchase = purchases.find(purchase => {
+                                        return barcode === purchase.barcode;
+                                    });
+                                    localForage.setItem(barcode, { name, image });
+                                    let thing = Object.assign(purchase, { name, image });
+                                    thingsWithDetails.push(thing);
+                                }
+                                else {
+                                    console.log('Warning: Probably purchase data for a deleted thing');
+                                }
                             });
 
                             // set state with values
