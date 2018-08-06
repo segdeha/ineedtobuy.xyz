@@ -61,6 +61,10 @@ class AddThing extends Component {
             });
         }
         else {
+            this.setState({
+                barcodeValue: '',
+                imgSrc: '/img/groceries.svg'
+            });
             alert('No barcode detected.');
         }
     }
