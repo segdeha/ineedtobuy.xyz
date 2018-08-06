@@ -47,23 +47,24 @@ class PurchaseList extends Component {
                     // query firestore
                     let promises = [];
                     unCachedBarcodes.forEach(barcode => {
-                        let thing = firestore.collection('things').doc(`${barcode}`);
+                        let thing = firestore.collection('things').where('barcode', '==', `${barcode}`);
                         promises.push(thing.get());
                     });
                     Promise.all(promises)
-                        .then(values => {
-                            values.forEach((value) => {
-                                if (value && value.barcode) {
-                                    let { barcode, name, image } = value.data();
+                        .then(snapshots => {
+                            snapshots.forEach(snapshot => {
+                                if (snapshot.empty) {
+                                    console.log('Warning: Probably purchase data for a deleted thing');
+                                }
+                                else {
+                                    let doc = snapshot.docs[0];
+                                    let { barcode, name, image } = doc.data();
                                     let purchase = purchases.find(purchase => {
                                         return barcode === purchase.barcode;
                                     });
                                     localForage.setItem(barcode, { name, image });
                                     let thing = Object.assign(purchase, { name, image });
                                     thingsWithDetails.push(thing);
-                                }
-                                else {
-                                    console.log('Warning: Probably purchase data for a deleted thing');
                                 }
                             });
 
