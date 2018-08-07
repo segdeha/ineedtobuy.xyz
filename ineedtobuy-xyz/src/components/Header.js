@@ -27,6 +27,7 @@ class Header extends Component {
         return (
             <header>
                 <Link className="header-link" to="/" />
+                <Link className="back-link" to="/" />
                 <a className={`share-link ${className}`} href={`sms:?&body=${smsMsg}`} />
             </header>
         );
