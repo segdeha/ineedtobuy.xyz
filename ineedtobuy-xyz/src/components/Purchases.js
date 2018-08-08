@@ -14,16 +14,40 @@ import PurchaseList from './PurchaseList';
  * Structure of a purchase:
  * barcode<Number>
  * estimated_purchase_interval<Number>
+ * number_of_purchases<Number>
  * last_purchase<Timestamp>
  * token<String>
  */
 class Purchases extends Component {
     constructor(props) {
         super(props);
+        this.onDelete = this.onDelete.bind(this);
         this.onPurchase = this.onPurchase.bind(this);
     }
 
-    onPurchase(thing, snapshot) {
+    onDelete(id, firestore) {
+        let li = document.querySelector(`[data-id="${id}"]`);
+        if (window.confirm('Are you sure you want to delete this item and its purchase history?')) {
+            let docRef = firestore.collection('purchases').doc(id);
+            if (docRef) {
+                docRef.delete()
+                    .then(() => {
+                        // animate element out of the DOM
+                        // i haven't figured out how to get Firestore to re-fetch
+                        // so the element will remain until the next data fetch
+                        li.classList.add('fade');
+                        setTimeout(() => {
+                            li.classList.add('hide');
+                        }, 500);
+                    }).catch(console.error);
+            }
+        }
+        else {
+            li.classList.remove('swiped');
+        }
+    }
+
+    onPurchase(thing, firestore) {
         let {
             estimated_purchase_interval,
             id,
@@ -31,19 +55,13 @@ class Purchases extends Component {
             number_of_purchases
         } = thing;
 
-        let doc;
-        snapshot.docs.forEach(docCandidate => {
-            if (id === docCandidate.id) {
-                doc = docCandidate;
-                return;
-            }
-        });
+        let docRef = firestore.collection('purchases').doc(id);
 
-        if (doc) {
+        if (docRef) {
             let purhcase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
 
             // save new data to firestore
-            doc.ref.set(purhcase_data, { merge: true });
+            docRef.set(purhcase_data, { merge: true });
         }
     }
 
@@ -82,7 +100,7 @@ class Purchases extends Component {
 
                         purchases = (
                             <section>
-                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} />
+                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} onDelete={this.onDelete} />
                             </section>
                         );
                     }

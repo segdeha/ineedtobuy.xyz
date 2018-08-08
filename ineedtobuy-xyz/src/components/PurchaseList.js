@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withFirestore } from 'react-firestore';
 import localForage from 'localforage';
+import Hammer from 'hammerjs';
 
 import Loading from './Loading';
 
 class PurchaseList extends Component {
-    state = {
-        thingsWithDetails: null
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            thingsWithDetails: null
+        };
+
+        this.addSwipeListeners = this.addSwipeListeners.bind(this);
+    }
 
     _loadThingDetails(purchases) {
         let { firestore } = this.props;
@@ -95,14 +102,30 @@ class PurchaseList extends Component {
     }
 
     componentWillUnmount() {
+        // TODO figure out how to do this with Firestore
         // if (this._asyncRequest) {
         //     this._asyncRequest.cancel();
         // }
     }
 
+    addSwipeListeners() {
+        let lis = document.querySelectorAll('.purchases-list li');
+        for (let i = 0; i < lis.length; i += 1) {
+            let mc = Hammer(lis[i]);
+            mc.on('swipeleft', evt => {
+                evt.target.parentNode.classList.add('swiped');
+            });
+            mc.on('swiperight', evt => {
+                evt.target.parentNode.classList.remove('swiped');
+            });
+        }
+    }
+
     render() {
-        let { onPurchase, snapshot } = this.props;
+        let { onDelete, onPurchase, firestore } = this.props;
         let { thingsWithDetails } = this.state;
+
+        window.requestAnimationFrame(this.addSwipeListeners);
 
         return null === thingsWithDetails ? (
             <Loading />
@@ -111,13 +134,15 @@ class PurchaseList extends Component {
                 {thingsWithDetails.map(thing => {
                     let {
                         barcode,
+                        id,
                         name,
                         image,
                         className
                     } = thing;
                     return (
-                        <li key={barcode}>
-                            <button className={className} onClick={() => { onPurchase(thing, snapshot) }}>
+                        <li data-id={id} key={barcode}>
+                            <div className="delete-link" onClick={() => { onDelete(id, firestore) }} />
+                            <button className={className} onClick={() => { onPurchase(thing, firestore) }}>
                                 <img className="bought-it" src="/img/add.svg" alt="Bought it!" />
                             </button>
                             <figure className="thumbnail">
