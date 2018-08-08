@@ -4,6 +4,8 @@ import { withFirestore } from 'react-firestore';
 import localForage from 'localforage';
 import Hammer from 'hammerjs';
 
+import { daysSinceLastPurchase } from '../lib/dates';
+
 import Loading from './Loading';
 
 class PurchaseList extends Component {
@@ -137,14 +139,19 @@ class PurchaseList extends Component {
                         id,
                         name,
                         image,
-                        className
+                        className,
+                        last_purchase
                     } = thing;
+
+                    let boughtIt = daysSinceLastPurchase(last_purchase) < 2 ? 'bought-it' : '';
+
                     return (
                         <li data-id={id} key={barcode}>
                             <div className="delete-link" onClick={() => { onDelete(id, firestore) }} />
-                            <button className={className} onClick={() => { onPurchase(thing, firestore) }}>
-                                <img className="bought-it" src="/img/add.svg" alt="Bought it!" />
-                            </button>
+                            <button className={`${className} ${boughtIt}`} onClick={(evt) => {
+                                evt.preventDefault();
+                                onPurchase(thing, firestore);
+                            }} />
                             <figure className="thumbnail">
                                 <img src={image} alt={name} />
                             </figure>

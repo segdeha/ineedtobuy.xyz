@@ -61,7 +61,11 @@ class Purchases extends Component {
             let purhcase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
 
             // save new data to firestore
-            docRef.set(purhcase_data, { merge: true });
+            docRef.set(purhcase_data, { merge: true })
+                .then(() => {
+                    console.log('Purchase updated successfully');
+                })
+                .catch(console.log);
         }
     }
 

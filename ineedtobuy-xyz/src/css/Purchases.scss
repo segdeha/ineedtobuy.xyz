@@ -59,6 +59,8 @@
             }
 
             button {
+                background: url(/img/checkmark.png) center no-repeat;
+                background-size: 30px;
                 color: white;
                 border: none;
                 border-radius: 50%;
@@ -76,11 +78,10 @@
                 width: 30px;
                 -webkit-appearance: none;
                    -moz-appearance: none;
+            }
 
-                .bought-it {
-                    height: 30px;
-                    width: 30px;
-                }
+            button.bought-it {
+                background-image: url(/img/checkmark-checked.png);
             }
 
             button:focus {
@@ -89,6 +90,21 @@
 
             button:active {
                 transform: $button-scale;
+            }
+
+            /* 0 - 3 days */
+            .soon {
+                background-color: $buy-it-soon;
+            }
+
+            /* 4 - 10 days */
+            .pretty-soon {
+                background-color: $buy-it-pretty-soon;
+            }
+
+            /* > 10 days */
+            .not-soon {
+                background-color: $buy-it-not-soon;
             }
         }
 
@@ -115,20 +131,5 @@
         li:active {
             transform: $button-scale;
         }
-    }
-
-    /* 0 - 3 days */
-    .soon {
-        background: $buy-it-soon;
-    }
-
-    /* 4 - 10 days */
-    .pretty-soon {
-        background: $buy-it-pretty-soon;
-    }
-
-    /* > 10 days */
-    .not-soon {
-        background: $buy-it-not-soon;
     }
 }
