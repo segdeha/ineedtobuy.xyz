@@ -86,7 +86,7 @@ class Purchases extends Component {
                     // bail early if we're still waiting for data
                     if (isLoading) {
                         return (
-                            <Loading />
+                            <Loading token={token} />
                         );
                     }
 
@@ -126,7 +126,7 @@ class Purchases extends Component {
                     // everything else to be rendered goes here
                     return (
                         <main className="purchases full-viewport container">
-                            <Header />
+                            <Header token={token} />
                             {purchases}
                             <Footer current="purchases" />
                         </main>

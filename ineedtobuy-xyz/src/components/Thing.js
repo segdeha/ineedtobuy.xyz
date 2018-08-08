@@ -24,7 +24,7 @@ class Thing extends Component {
                     // bail early if we're still waiting for data
                     if (isLoading) {
                         return (
-                            <Loading />
+                            <Loading token={token} />
                         );
                     }
 
@@ -49,7 +49,7 @@ class Thing extends Component {
 
                     return (
                         <main className="thing full-viewport container">
-                            <Header />
+                            <Header token={token} />
                             <section>
                                 <ThingDetails barcode={barcode} />
                                 <div className="purchases">

@@ -5,9 +5,11 @@ import Footer from './Footer';
 
 class Loading extends Component {
     render() {
+        let { token } = this.props;
+
         return (
             <main className="loading full-viewport container">
-                <Header />
+                <Header token={token} />
                 <section>
                     <img src="/img/loading.gif" alt="Loading…" />
                 </section>

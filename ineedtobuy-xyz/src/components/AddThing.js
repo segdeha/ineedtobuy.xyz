@@ -237,6 +237,7 @@ class AddThing extends Component {
     }
 
     render() {
+        let { token } = this.props;
         let {
             nameValue,
             barcodeValue,
@@ -276,7 +277,7 @@ class AddThing extends Component {
 
         return (
             <main className="add-thing full-viewport container">
-                <Header />
+                <Header token={token} />
                 <section>
                     <form className="card" onSubmit={this.onSubmit}>
                         <input type="hidden" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} />
