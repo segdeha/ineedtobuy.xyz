@@ -1,6 +1,7 @@
 @import './Variables.scss';
 
 header {
+    background: white;
     box-shadow: $drop-shadow;
     height: 60px;
     top: 0;
@@ -26,6 +27,16 @@ header {
         right: 45px;
     }
 
+    .back-link {
+        background: url(/img/right-bracket.svg) 10px no-repeat;
+        background-size: auto 24px;
+        display: none;
+        left: 0;
+        top: -6px;
+        transform: scaleX(-1); // flip horizontal
+        width: 50px;
+    }
+
     .share-link {
         background-image: url(/img/share.png);
         background-size: auto 30px;
@@ -38,4 +49,8 @@ header {
     .show {
         display: block;
     }
+}
+
+.thing header .back-link {
+    display: block;
 }

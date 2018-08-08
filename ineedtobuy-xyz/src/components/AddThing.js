@@ -3,6 +3,7 @@ import { withFirestore } from 'react-firestore';
 import Quagga from 'quagga';
 import uuidv4 from 'uuid/v4';
 
+import { defaultImageSrc } from '../lib/constants';
 import { daysSinceLastPurchase } from '../lib/dates';
 import fetchBarcodeInfo from '../lib/barcodes';
 import { getNewPurchaseData, getUpdatedPurchaseData } from '../lib/purchase-data';
@@ -11,19 +12,39 @@ import Header from './Header';
 import Footer from './Footer';
 
 class AddThing extends Component {
+    initialState = {
+        nameValue: '',
+        barcodeValue: '',
+        imgSrc: defaultImageSrc,
+        showSuccess: false,
+        showError: false,
+        buttonDisabled: false,
+        selectedRadio: 'pretty-soon'
+    };
+
+    radioStates = {
+        selected: {
+            className: 'selected',
+            checked: true
+        },
+        notSelected: {
+            className: '',
+            checked: false
+        }
+    };
+
     constructor(props) {
         super(props);
-        this.thingExists = this.thingExists.bind(this);
+
+        this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onImageChange = this.onImageChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
-        this.onBarcodeChange = this.onBarcodeChange.bind(this);
         this.onProcessed = this.onProcessed.bind(this);
+        this.onRadioClick = this.onRadioClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.state = {
-            nameValue: '',
-            barcodeValue: '',
-            imgSrc: '/img/groceries.svg'
-        };
+        this.thingExists = this.thingExists.bind(this);
+
+        this.state = this.initialState;
     }
 
     thingExists(barcode) {
@@ -46,7 +67,7 @@ class AddThing extends Component {
                 if (item.barcode < 0) {
                     this.setState({
                         barcodeValue: barcode,
-                        imgSrc: '/img/groceries.svg'
+                        imgSrc: defaultImageSrc
                     });
                     alert('Unknown barcode. Enter a name for the item.');
                     document.querySelector('[name="intb-name"]').focus();
@@ -61,6 +82,10 @@ class AddThing extends Component {
             });
         }
         else {
+            this.setState({
+                barcodeValue: '',
+                imgSrc: defaultImageSrc
+            });
             alert('No barcode detected.');
         }
     }
@@ -70,7 +95,7 @@ class AddThing extends Component {
         this.setState({
             nameValue: '',
             barcodeValue: '',
-            imgSrc: '/img/groceries.svg'
+            imgSrc: defaultImageSrc
         });
         let files = evt.target.files;
         if (files.length > 0) {
@@ -113,14 +138,26 @@ class AddThing extends Component {
         });
     }
 
+    onRadioClick(evt) {
+        this.setState({
+            selectedRadio: evt.target.value
+        });
+    }
+
     onSubmit(evt) {
         evt.preventDefault();
 
         let { firestore, token } = this.props;
 
+        // prevent user from submitting something multiple times
+        this.setState({
+            buttonDisabled: true
+        });
+
         let barcode = document.querySelector('[name="intb-barcode"]').value;
         let name = document.querySelector('[name="intb-name"]').value;
         let image = document.querySelector('#output').src;
+        let estimate = document.querySelector('[name="intb-estimate"]:checked').value;
 
         if (!name) {
             alert('Enter the name of the item');
@@ -159,7 +196,7 @@ class AddThing extends Component {
                         if (snapshot.empty) {
                             // new purchase
                             purchaseDocRef = firestore.collection('purchases').doc();
-                            purchase_data = getNewPurchaseData(barcode, token);
+                            purchase_data = getNewPurchaseData(barcode, token, estimate);
                         }
                         else {
                             let doc = snapshot.docs[0];
@@ -188,17 +225,59 @@ class AddThing extends Component {
 
                         writeBatch.commit().then(() => {
                             console.log('Successfully executed batch.');
+                            this.setState({
+                                showSuccess: true
+                            });
+                            setTimeout(() => {
+                                this.setState(this.initialState);
+                            }, 2000);
                         });
                     });
             });
     }
 
     render() {
-        let { nameValue, barcodeValue, imgSrc } = this.state;
+        let { token } = this.props;
+        let {
+            nameValue,
+            barcodeValue,
+            imgSrc,
+            showSuccess,
+            showError,
+            buttonDisabled,
+            selectedRadio
+        } = this.state;
+
+        let successClass = showSuccess ? 'show': '';
+        let errorClass = showError ? 'show': '';
+
+        let radioState;
+        if ('soon' === selectedRadio) {
+            radioState = {
+                soon:this.radioStates.selected,
+                prettySoon: this.radioStates.notSelected,
+                notSoon: this.radioStates.notSelected
+            };
+        }
+        else if ('not-soon' === selectedRadio) {
+            radioState = {
+                soon: this.radioStates.notSelected,
+                prettySoon: this.radioStates.notSelected,
+                notSoon: this.radioStates.selected
+            };
+        }
+        // default is 'pretty-soon'
+        else {
+            radioState = {
+                soon: this.radioStates.notSelected,
+                prettySoon: this.radioStates.selected,
+                notSoon: this.radioStates.notSelected
+            };
+        }
 
         return (
             <main className="add-thing full-viewport container">
-                <Header />
+                <Header token={token} />
                 <section>
                     <form className="card" onSubmit={this.onSubmit}>
                         <input type="hidden" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} />
@@ -210,10 +289,35 @@ class AddThing extends Component {
                         <label>
                             <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
                         </label>
+                        <div className="radioGroup oneByThree">
+                            <p>How soon do you expect to buy this again?</p>
+                            <label className={`radio soon ${radioState.soon.className}`}>
+                                Soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.soon.checked} name="intb-estimate" value="soon" />
+                            </label>
+                            <label className={`radio pretty-soon ${radioState.prettySoon.className}`}>
+                                Pretty soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.prettySoon.checked} name="intb-estimate" value="pretty-soon" />
+                            </label>
+                            <label className={`radio not-soon ${radioState.notSoon.className}`}>
+                                Not soon
+                                <input type="radio" onChange={this.onRadioClick} checked={radioState.notSoon.checked} name="intb-estimate" value="not-soon" />
+                            </label>
+                        </div>
                         <p>
-                            <button onClick={this.onSubmit}>Add it</button>
+                            <button disabled={buttonDisabled} onClick={this.onSubmit}>Add it</button>
                         </p>
                     </form>
+                    <div className={`result success-adding-thing ${successClass}`}>
+                        <p>
+                            <strong>Item added successfully!</strong>
+                        </p>
+                    </div>
+                    <div className={`result problem-adding-thing ${errorClass}`}>
+                        <p>
+                            <strong>Problem adding item. Try again.</strong>
+                        </p>
+                    </div>
                 </section>
                 <Footer current="add" />
             </main>

@@ -15,19 +15,33 @@
             box-shadow: $drop-shadow;
             height: 40px;
             margin-bottom: 5px;
+            overflow: hidden;
+            position: relative;
+            transition: opacity $transition-duration;
+
+            .delete-link {
+                background: red url(/img/x.png) center center no-repeat;
+                background-size: 20px 20px;
+                bottom: 0;
+                right: 0;
+                position: absolute;
+                top: 0;
+                width: 40px;
+            }
 
             .detail-link {
-                background: transparent url(/img/right-bracket.svg) center right no-repeat;
+                background: white url(/img/right-bracket.svg) right 6px center no-repeat;
                 background-size: 20px 20px;
                 color: black;
                 display: block;
                 line-height: 40px;
-                margin-right: 0.5rem;
                 overflow: hidden;
-                padding: 0 1.5rem 0 0;
+                padding-right: 2rem;
+                position: relative;
                 text-decoration: none;
                 text-overflow: ellipsis;
                 white-space: pre;
+                z-index: 1;
             }
 
             .thumbnail {
@@ -45,6 +59,8 @@
             }
 
             button {
+                background: url(/img/checkmark.png) center no-repeat;
+                background-size: 30px;
                 color: white;
                 border: none;
                 border-radius: 50%;
@@ -62,11 +78,10 @@
                 width: 30px;
                 -webkit-appearance: none;
                    -moz-appearance: none;
+            }
 
-                .bought-it {
-                    height: 30px;
-                    width: 30px;
-                }
+            button.bought-it {
+                background-image: url(/img/checkmark-checked.png);
             }
 
             button:focus {
@@ -76,10 +91,27 @@
             button:active {
                 transform: $button-scale;
             }
+
+            /* 0 - 3 days */
+            .soon {
+                background-color: $buy-it-soon;
+            }
+
+            /* 4 - 10 days */
+            .pretty-soon {
+                background-color: $buy-it-pretty-soon;
+            }
+
+            /* > 10 days */
+            .not-soon {
+                background-color: $buy-it-not-soon;
+            }
         }
 
-        li:active {
-            transform: $button-scale;
+        li {
+            .detail-link, .thumbnail, button {
+                transition: transform $transition-duration;
+            }
         }
 
         li.search {
@@ -105,20 +137,23 @@
         li.search:active {
             transform: none;
         }
-    }
 
-    /* 0 - 3 days */
-    .soon {
-        background: $buy-it-soon;
-    }
+        li.swiped {
+            .detail-link, .thumbnail, button {
+                transform: translate3d(-40px, 0, 0);
+            }
+        }
 
-    /* 4 - 10 days */
-    .pretty-soon {
-        background: $buy-it-pretty-soon;
-    }
+        li.fade {
+            opacity: 0;
+        }
 
-    /* > 10 days */
-    .not-soon {
-        background: $buy-it-not-soon;
+        li.hide {
+            display: none;
+        }
+
+        li:active {
+            transform: $button-scale;
+        }
     }
 }

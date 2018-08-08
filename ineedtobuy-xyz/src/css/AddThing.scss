@@ -26,4 +26,41 @@
             margin: 1rem 0;
         }
     }
+
+    .result {
+        background: rgba(0,0,0,0.5);
+        bottom: 42px;
+        left: 0;
+        opacity: 0;
+        position: fixed;
+        right: 0;
+        top: 60px;
+        transition: opacity $transition-duration-long, visibility $transition-duration-long;
+        visibility: hidden;
+
+        p {
+            background: white;
+            box-shadow: $drop-shadow;
+            left: 2rem;
+            margin-top: -2rem;
+            padding: 1rem;
+            position: absolute;
+            right: 2rem;
+            text-align: center;
+            top: 50%;
+        }
+    }
+
+    .result.success-adding-thing {
+        color: $success;
+    }
+
+    .result.problem-adding-thing {
+        color: $problem;
+    }
+
+    .result.show {
+        opacity: 1;
+        visibility: visible;
+    }
 }

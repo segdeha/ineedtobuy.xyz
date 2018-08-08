@@ -1,8 +1,8 @@
 @import 'css/Variables.scss';
 
 body {
-    background: white;
-    font: 16px/1.5 $font-family;
+    background: $background;
+    font: 16px/1.5 "Helvetica Neue", Sans-Serif;
     margin: 0;
     height: 100vh;
     overflow: hidden;
@@ -24,11 +24,12 @@ body {
         background: $background;
         bottom: 42px;
         left: 0;
-        overflow: auto;
+        overflow-y: scroll;
         padding: 1rem;
         position: absolute;
         right: 0;
         top: 61px;
+        -webkit-overflow-scrolling: touch;
     }
 }
 

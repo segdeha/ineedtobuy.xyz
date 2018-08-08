@@ -1,3 +1,5 @@
+import { defaultImageSrc } from './constants';
+
 let fetchBarcodeInfo = barcode => {
     let url = `/api/lookup.php?barcode=${barcode}`;
 
@@ -15,7 +17,7 @@ let fetchBarcodeInfo = barcode => {
                     image = result.items[0].largeImage.replace(/\?.*/, '');
                 }
                 else {
-                    image = '/img/groceries.svg';
+                    image = defaultImageSrc;
                 }
                 item =  { barcode, name, image };
             }

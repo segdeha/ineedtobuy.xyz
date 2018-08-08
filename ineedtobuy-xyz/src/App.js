@@ -148,7 +148,13 @@ class App extends Component {
                         <Route path="/:tldr">
                             <Redirect to="/" />
                         </Route>
-                        <Route path="/" render={() => <FirstRun onChange={this.onChange} onNext={this.onNext} onClear={this.onClear} tokenValue={tokenValue} referral={referral} />} />;
+                        <Route path="/" render={() => <FirstRun
+                            onChange={this.onChange}
+                            onNext={this.onNext}
+                            onClear={this.onClear}
+                            tokenValue={tokenValue}
+                            referral={referral}
+                        />}/>;
                     </Switch>
                 </BrowserRouter>
              );

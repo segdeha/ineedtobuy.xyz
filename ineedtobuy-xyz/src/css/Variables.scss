@@ -10,7 +10,14 @@ $buy-it-soon: rgba(136, 192, 87, 0.67);
 $buy-it-pretty-soon: rgba(238, 175, 75, 0.67);
 $buy-it-not-soon: rgba(237, 63, 50, 0.67);
 
+$buy-it-soon-opaque: rgba(136, 192, 87, 1);
+$buy-it-pretty-soon-opaque: rgba(238, 175, 75, 1);
+$buy-it-not-soon-opaque: rgba(237, 63, 50, 1);
+
 $background: #dae7ef;
+
+$success: #436b1c;
+$problem: #ed3f32;
 
 /* shadows */
 
@@ -21,4 +28,6 @@ $drop-shadow-button: rgba(0, 0, 0, 0.25) 0 2px 4px 0;
 /* animations */
 
 $transition-duration: 0.2s;
+$transition-duration-long: 0.4s;
+
 $button-scale: scale(0.95);

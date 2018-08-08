@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
+import STRINGS from '../lib/strings';
+
 import Header from './Header';
 
 class FirstRun extends Component {
@@ -28,11 +30,11 @@ class FirstRun extends Component {
         let buttonText, instructions, secondary_instructions, inputType, inputDisabled;
 
         if (referral) {
-            buttonText = 'Join shopping list';
+            buttonText = STRINGS.joinButton;
             instructions = (
                 <Fragment>
                     <p>Looks like someone asked you to join their shopping list.</p>
-                    <p>Tap “Join shopping list” to get started.</p>
+                    <p>Tap “{STRINGS.joinButton}” to get started.</p>
                 </Fragment>
             );
             secondary_instructions = (
@@ -42,10 +44,10 @@ class FirstRun extends Component {
             inputDisabled = true;
         }
         else if (manualReferral) {
-            buttonText = 'Join shopping list';
+            buttonText = STRINGS.joinButton;
             instructions = (
                 <Fragment>
-                    <p>Enter your share code below. Then tap “Join shopping list” to get started.</p>
+                    <p>Enter your share code below. Then tap “{STRINGS.joinButton}” to get started.</p>
                 </Fragment>
             );
             secondary_instructions = (
@@ -55,10 +57,10 @@ class FirstRun extends Component {
             inputDisabled = false;
         }
         else {
-            buttonText = 'Create shopping list';
+            buttonText = STRINGS.createButton;
             instructions = (
                 <Fragment>
-                    <p>Tap “Create shopping list” to get started.</p>
+                    <p>Tap “{STRINGS.createButton}” to get started.</p>
                 </Fragment>
             );
             secondary_instructions = (
@@ -77,7 +79,7 @@ class FirstRun extends Component {
                         <h1>Welcome to your smart shopping list!</h1>
                         {instructions}
                         <label>
-                            <input style={{ textAlign: 'center' }} type={inputType} disabled={inputDisabled} name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Share Code" autoCapitalize="none" />
+                            <input type={inputType} disabled={inputDisabled} name="intb-token" onChange={onChange} value={tokenValue} required placeholder="Share Code" autoCapitalize="none" />
                         </label>
                         <p>
                             <button onClick={onNext}>{buttonText}</button>

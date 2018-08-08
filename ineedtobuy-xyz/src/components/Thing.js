@@ -24,17 +24,18 @@ class Thing extends Component {
                     // bail early if we're still waiting for data
                     if (isLoading) {
                         return (
-                            <Loading />
+                            <Loading token={token} />
                         );
                     }
 
                     if (data.length > 0) {
                         let thing = data[0];
-                        let { last_purchase, estimated_purchase_interval } = thing;
+                        let { last_purchase, estimated_purchase_interval, number_of_purchases } = thing;
                         let { last, next } = getLastAndNext(last_purchase.seconds, estimated_purchase_interval);
 
                         purchases = (
                             <ul>
+                                <li>Number of purchases: {number_of_purchases}</li>
                                 <li>Last purchase: {last}</li>
                                 <li>Next purchase: {next}</li>
                             </ul>
@@ -48,7 +49,7 @@ class Thing extends Component {
 
                     return (
                         <main className="thing full-viewport container">
-                            <Header />
+                            <Header token={token} />
                             <section>
                                 <ThingDetails barcode={barcode} />
                                 <div className="purchases">
