@@ -70,7 +70,7 @@ class AddThing extends Component {
                         imgSrc: defaultImageSrc
                     });
                     alert('Unknown barcode. Enter a name for the item.');
-                    document.querySelector('[name="intb-name"]').focus();
+                    document.querySelector('[name="intb-thing"]').focus();
                 }
                 else {
                     this.setState({
@@ -155,13 +155,13 @@ class AddThing extends Component {
         });
 
         let barcode = document.querySelector('[name="intb-barcode"]').value;
-        let name = document.querySelector('[name="intb-name"]').value;
+        let name = document.querySelector('[name="intb-thing"]').value;
         let image = document.querySelector('#output').src;
         let estimate = document.querySelector('[name="intb-estimate"]:checked').value;
 
         if (!name) {
             alert('Enter the name of the item');
-            document.querySelector('[name="intb-name"]').focus();
+            document.querySelector('[name="intb-thing"]').focus();
             return;
         }
 
@@ -287,7 +287,7 @@ class AddThing extends Component {
                             <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
                         </label>
                         <label>
-                            <input type="text" name="intb-name" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
+                            <input type="text" name="intb-thing" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
                         </label>
                         <div className="radioGroup oneByThree">
                             <p>How soon do you expect to buy this again?</p>
