@@ -93,9 +93,48 @@ class Purchases extends Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        let { query } = this.state;
+        return query !== nextState.query;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.queryValue && this.search) {
+            this.search.focus();
+        }
+    }
+
+    _preparePurchaseData(data) {
+        let { query } = this.state;
+        let things = data;
+
+        // narrow the list based on user input
+        if (query) {
+            let rgx = new RegExp(query, 'i');
+            things = things.filter(thing => {
+                return rgx.test(thing.name);
+            });
+        }
+
+        // add next purchase date and class name to each thing
+        things = things.map(thing => {
+            let { estimated_purchase_interval, last_purchase } = thing;
+            thing.next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
+            thing.className = thing.next < 4 ? 'soon' : thing.next < 11 ? 'pretty-soon' : 'not-soon';
+            return thing;
+        });
+
+        // sort by how soon the user is estiamted to need to buy the item
+        things.sort((a, b) => {
+            return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
+        });
+
+        return things;
+    }
+
     render() {
         let { token } = this.props;
-        let { query, queryValue } = this.state;
+        let { queryValue } = this.state;
 
         return (
             <FirestoreCollection
@@ -116,33 +155,24 @@ class Purchases extends Component {
                     }
 
                     if (data.length > 0) {
-                        let things = data;
-
-                        // narrow the list based on user input
-                        if (query) {
-                            let rgx = new RegExp(query,'i');
-                            things = things.filter(thing => {
-                                return rgx.test(thing.name);
-                            });
-                        }
-
-                        // add next purchase date and class name to each thing
-                        things = things.map(thing => {
-                            let { estimated_purchase_interval, last_purchase } = thing;
-                            thing.next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
-                            thing.className = thing.next < 4 ? 'soon' : thing.next < 11 ? 'pretty-soon' : 'not-soon';
-                            return thing;
-                        });
-
-                        // sort by how soon the user is estiamted to need to buy the item
-                        things.sort((a, b) => {
-                            return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
-                        });
-
-console.log('Purchases/render', things.length)
+                        let things = this._preparePurchaseData(data);
 
                         purchases = (
                             <section>
+                                <ul className="purchases-list">
+                                    <li className="search">
+                                        <form>
+                                            <input
+                                                type="text"
+                                                name="intb-search"
+                                                value={queryValue}
+                                                placeholder="Filter list"
+                                                onChange={this.onSearch}
+                                                ref={input => { this.search = input }}
+                                            />
+                                        </form>
+                                    </li>
+                                </ul>
                                 <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} onSearch={this.onSearch} queryValue={queryValue} />
                             </section>
                         );

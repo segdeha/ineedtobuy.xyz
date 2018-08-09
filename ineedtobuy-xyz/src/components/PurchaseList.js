@@ -98,12 +98,9 @@ class PurchaseList extends Component {
     componentWillReceiveProps(nextProps) {
         let { things } = this.props;
 
-console.log('PurchaseList/componentWillReceiveProps: things.length', things.length)
-console.log('PurchaseList/componentWillReceiveProps: nextProps.things.length', nextProps.things.length)
-
         if (nextProps.things.length !== things.length) {
             this.setState({thingsWithDetails: null});
-            this._loadThingDetails(things);
+            this._loadThingDetails(nextProps.things);
         }
     }
 
@@ -128,7 +125,7 @@ console.log('PurchaseList/componentWillReceiveProps: nextProps.things.length', n
     }
 
     render() {
-        let { onDelete, onPurchase, onSearch, firestore, queryValue } = this.props;
+        let { onDelete, onPurchase, firestore } = this.props;
         let { thingsWithDetails } = this.state;
 
         window.requestAnimationFrame(this.addSwipeListeners);
@@ -137,11 +134,6 @@ console.log('PurchaseList/componentWillReceiveProps: nextProps.things.length', n
             <Loading />
         ) : (
             <ul className="purchases-list">
-                <li className="search">
-                    <form>
-                        <input type="text" name="intb-search" value={queryValue} placeholder="Search" onChange={onSearch} />
-                    </form>
-                </li>
                 {thingsWithDetails.map(thing => {
                     let {
                         barcode,
