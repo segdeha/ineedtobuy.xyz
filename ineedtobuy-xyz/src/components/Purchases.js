@@ -22,31 +22,8 @@ class Purchases extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            query: '',
-            queryValue: ''
-        };
-
         this.onDelete = this.onDelete.bind(this);
-        this.onSearch = this.onSearch.bind(this);
         this.onPurchase = this.onPurchase.bind(this);
-    }
-
-    onSearch(evt) {
-        let queryValue = evt.target.value;
-        let state = {
-            query: '',
-            queryValue: ''
-        };
-
-        if (queryValue) {
-            state = {
-                query: queryValue,
-                queryValue
-            };
-        }
-
-        this.setState(state);
     }
 
     onDelete(id, firestore) {
@@ -105,16 +82,7 @@ class Purchases extends Component {
     }
 
     _preparePurchaseData(data) {
-        let { query } = this.state;
         let things = data;
-
-        // narrow the list based on user input
-        if (query) {
-            let rgx = new RegExp(query, 'i');
-            things = things.filter(thing => {
-                return rgx.test(thing.name);
-            });
-        }
 
         // add next purchase date and class name to each thing
         things = things.map(thing => {
@@ -134,7 +102,6 @@ class Purchases extends Component {
 
     render() {
         let { token } = this.props;
-        let { queryValue } = this.state;
 
         return (
             <FirestoreCollection
@@ -159,21 +126,12 @@ class Purchases extends Component {
 
                         purchases = (
                             <section>
-                                <ul className="purchases-list">
-                                    <li className="search">
-                                        <form>
-                                            <input
-                                                type="text"
-                                                name="intb-search"
-                                                value={queryValue}
-                                                placeholder="Filter list"
-                                                onChange={this.onSearch}
-                                                ref={input => { this.search = input }}
-                                            />
-                                        </form>
-                                    </li>
-                                </ul>
-                                <PurchaseList things={things} snapshot={snapshot} onPurchase={this.onPurchase} onSearch={this.onSearch} queryValue={queryValue} />
+                                <PurchaseList
+                                    things={things}
+                                    snapshot={snapshot}
+                                    onDelete={this.onDelete}
+                                    onPurchase={this.onPurchase}
+                                />
                             </section>
                         );
                     }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { withFirestore } from 'react-firestore';
 import localForage from 'localforage';
@@ -13,10 +13,13 @@ class PurchaseList extends Component {
         super(props);
 
         this.state = {
-            thingsWithDetails: null
+            thingsWithDetails: null,
+            query: '',
+            queryValue: ''
         };
 
         this.addSwipeListeners = this.addSwipeListeners.bind(this);
+        this.onSearch = this.onSearch.bind(this);
     }
 
     _loadThingDetails(purchases) {
@@ -124,43 +127,90 @@ class PurchaseList extends Component {
         }
     }
 
+    onSearch(evt) {
+        let queryValue = evt.target.value;
+        let state = {
+            query: '',
+            queryValue: ''
+        };
+
+        if (queryValue) {
+            state = {
+                query: queryValue,
+                queryValue
+            };
+        }
+
+        this.setState(state);
+    }
+
     render() {
         let { onDelete, onPurchase, firestore } = this.props;
-        let { thingsWithDetails } = this.state;
+        let { thingsWithDetails, query, queryValue } = this.state;
+
+        let rgx;
+        if (query) {
+            rgx = new RegExp(query, 'i');
+        }
 
         window.requestAnimationFrame(this.addSwipeListeners);
 
         return null === thingsWithDetails ? (
             <Loading />
         ) : (
-            <ul className="purchases-list">
-                {thingsWithDetails.map(thing => {
-                    let {
-                        barcode,
-                        id,
-                        name,
-                        image,
-                        className,
-                        last_purchase
-                    } = thing;
+            <Fragment>
+                <ul className="purchases-list">
+                    <li className="search">
+                        <form>
+                            <input
+                                type="text"
+                                name="intb-search"
+                                value={queryValue}
+                                placeholder="Filter list"
+                                onChange={this.onSearch}
+                                ref={input => { this.search = input }}
+                            />
+                        </form>
+                    </li>
+                </ul>
+                <ul className="purchases-list">
+                    {thingsWithDetails.map(thing => {
+                        let {
+                            barcode,
+                            id,
+                            name,
+                            image,
+                            className,
+                            last_purchase
+                        } = thing;
 
-                    let boughtIt = daysSinceLastPurchase(last_purchase) < 2 ? 'bought-it' : '';
+                        if (rgx && !rgx.test(name)) {
+                            return null;
+                        }
 
-                    return (
-                        <li data-id={id} key={barcode}>
-                            <div className="delete-link" onClick={() => { onDelete(id, firestore) }} />
-                            <button className={`${className} ${boughtIt}`} onClick={(evt) => {
-                                evt.preventDefault();
-                                onPurchase(thing, firestore);
-                            }} />
-                            <figure className="thumbnail">
-                                <img src={image} alt={name} />
-                            </figure>
-                            <Link className="detail-link" to={`/thing/${barcode}`}>{name}</Link>
-                        </li>
-                    );
-                })}
-            </ul>
+                        let boughtIt = daysSinceLastPurchase(last_purchase) < 2 ? 'bought-it' : '';
+
+                        return (
+                            <li data-id={id} key={barcode}>
+                                <div
+                                    className="delete-link"
+                                    onClick={() => { onDelete(id, firestore) }}
+                                />
+                                <button
+                                    className={`${className} ${boughtIt}`}
+                                    onClick={(evt) => { onPurchase(thing, firestore) }}
+                                />
+                                <figure className="thumbnail">
+                                    <img src={image} alt={name} />
+                                </figure>
+                                <Link className="detail-link" to={`/thing/${barcode}`}>
+                                    {name}
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </Fragment>
         );
     }
 }
