@@ -70,11 +70,6 @@ class Purchases extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        let { query } = this.state;
-        return query !== nextState.query;
-    }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.queryValue && this.search) {
             this.search.focus();
