@@ -236,6 +236,46 @@ class AddThing extends Component {
             });
     }
 
+    startScanning() {
+        let viewport = document.getElementById('scan-container');
+        let style = window.getComputedStyle(viewport);
+        let { paddingBottom, width } = style;
+
+        Quagga.init({
+            inputStream : {
+                name : "Live",
+                type : "LiveStream",
+                constraints: {
+                    width: parseInt(width, 10),
+                    height: parseInt(paddingBottom, 10)
+                }
+            },
+            decoder: {
+                // chosen based on https://www.scandit.com/types-barcodes-choosing-right-barcode/
+                // executed in order
+                readers: [
+                    'upc_reader',
+                    'upc_e_reader',
+                    'ean_reader',
+                    'ean_8_reader'
+                ]
+            },
+        }, (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+
+        Quagga.onDetected(result => {
+
+console.log({result})
+
+        });
+    }
+
     render() {
         let { token } = this.props;
         let {
@@ -281,10 +321,24 @@ class AddThing extends Component {
                 <section>
                     <form className="card" onSubmit={this.onSubmit}>
                         <input type="hidden" name="intb-barcode" onChange={this.onBarcodeChange} value={barcodeValue} />
-                        <img src={imgSrc} alt="Barcode capture" id="output" />
-                        <label className="button">
+                        <div id="scan-container" style={{
+                            background: 'black',
+                            paddingBottom: '150%',
+                            position: 'relative',
+                            width: '100%'
+                        }}>
+                            <div id="interactive" className="viewport" style={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                left: 0
+                            }} />
+                        </div>
+                        {/* <img src={imgSrc} alt="Barcode capture" id="output" /> */}
+                        <label className="button" onClick={this.startScanning}>
                             Scan barcode
-                            <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} />
+                            {/* <input type="file" name="intb-scan" accept="image/*" capture="environment" onChange={this.onImageChange} /> */}
                         </label>
                         <label>
                             <input type="text" name="intb-thing" onChange={this.onNameChange} value={nameValue} required placeholder="Name of item" />
