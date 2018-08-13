@@ -198,7 +198,7 @@ class PurchaseList extends Component {
                                 />
                                 <button
                                     className={`${className} ${boughtIt}`}
-                                    onClick={(evt) => { onPurchase(thing, firestore) }}
+                                    onClick={evt => { onPurchase(thing, firestore, evt.target) }}
                                 />
                                 <figure className="thumbnail">
                                     <img src={image} alt={name} />

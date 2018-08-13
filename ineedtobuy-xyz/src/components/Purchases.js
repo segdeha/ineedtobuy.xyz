@@ -48,7 +48,7 @@ class Purchases extends Component {
         }
     }
 
-    onPurchase(thing, firestore) {
+    onPurchase(thing, firestore, el) {
         let {
             estimated_purchase_interval,
             id,
@@ -61,9 +61,14 @@ class Purchases extends Component {
         if (docRef) {
             let purhcase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
 
+            // show loading spinner
+            el.classList.add('buying-it');
+
             // save new data to firestore
             docRef.set(purhcase_data, { merge: true })
                 .then(() => {
+                    el.classList.remove('buying-it');
+                    el.classList.add('bought-it');
                     console.log('Purchase updated successfully');
                 })
                 .catch(console.log);

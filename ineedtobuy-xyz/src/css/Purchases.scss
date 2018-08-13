@@ -80,6 +80,11 @@
                    -moz-appearance: none;
             }
 
+            button.buying-it {
+                background-image: url(/img/checkmark.png), url(/img/gear.svg);
+                background-size: 30px, 20px;
+            }
+
             button.bought-it {
                 background-image: url(/img/checkmark-checked.png);
             }
