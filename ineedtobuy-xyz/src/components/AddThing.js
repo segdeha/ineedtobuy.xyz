@@ -216,7 +216,7 @@ class AddThing extends Component {
                             // if more than 24 hours, update doc with new
                             // last_purchase and number_of_purchases
                             else {
-                                purchaseDocRef = doc;
+                                purchaseDocRef = doc.ref;
                                 purchase_data = getUpdatedPurchaseData(last_purchase, estimated_purchase_interval, number_of_purchases);
                             }
                         }
