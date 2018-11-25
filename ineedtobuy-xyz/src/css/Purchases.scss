@@ -111,6 +111,11 @@
             .not-soon {
                 background-color: $buy-it-not-soon;
             }
+
+            /* too little data */
+            .dormant {
+                background-color: $buy-it-dormant;
+            }
         }
 
         li {

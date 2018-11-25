@@ -81,6 +81,27 @@ class Purchases extends Component {
         }
     }
 
+    // determine the class name for a given thing
+    // class name is based on number of days until next predicted purchase
+    // except when there has been only 1 purchase
+    // or when there has been a really long time since the last purchase
+    _getClassNameForThing(thing) {
+        let className;
+        if (thing.number_of_purchases < 2) {
+            className = 'dormant';
+        }
+        else if (thing.next < 2) {
+            className = 'soon';
+        }
+        else if (thing.next < 11) {
+            className = 'pretty-soon';
+        }
+        else {
+            className = 'not-soon';
+        }
+        return className;
+    }
+
     _preparePurchaseData(data) {
         let things = data;
 
@@ -88,7 +109,7 @@ class Purchases extends Component {
         things = things.map(thing => {
             let { estimated_purchase_interval, last_purchase } = thing;
             thing.next = daysUntilNextPurchase(estimated_purchase_interval, last_purchase.seconds);
-            thing.className = thing.next < 4 ? 'soon' : thing.next < 11 ? 'pretty-soon' : 'not-soon';
+            thing.className = this._getClassNameForThing(thing);
             return thing;
         });
 
