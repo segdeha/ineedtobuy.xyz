@@ -122,6 +122,17 @@ class Purchases extends Component {
             return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
         });
 
+        // extract dormant items so we can put them at the end of the array
+        let dormantThings = things.filter(thing => {
+            return thing.className === 'dormant';
+        });
+
+        things = things.filter(thing => {
+            return thing.className !== 'dormant';
+        });
+
+        things = things.concat(dormantThings);
+
         return things;
     }
 
