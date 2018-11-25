@@ -90,6 +90,9 @@ class Purchases extends Component {
         if (thing.number_of_purchases < 2) {
             className = 'dormant';
         }
+        else if (thing.next < -2 * thing.estimated_purchase_interval) {
+            className = 'dormant';
+        }
         else if (thing.next < 2) {
             className = 'soon';
         }
@@ -114,6 +117,7 @@ class Purchases extends Component {
         });
 
         // sort by how soon the user is estiamted to need to buy the item
+        // if the item is dormant, always put it last
         things.sort((a, b) => {
             return a.next > b.next ? 1 : a.next < b.next ? -1 : 0;
         });
